@@ -358,6 +358,8 @@ public class UintMap implements Serializable
             if (keys == null || occupiedCount * 4 >= (1 << power) * 3) {
                 // Too litle unused entries: rehash
                 rehashTable(intType);
+                // FIXME: the value is not read or used in any subsequent instruction.Also, the value computed
+                //  is never used this line need to be removes
                 keys = this.keys;
                 return insertNewKey(key);
             }
