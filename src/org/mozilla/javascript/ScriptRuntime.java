@@ -2682,6 +2682,7 @@ public class ScriptRuntime {
      *
      * See ECMA 11.9
      */
+    //FIXME:Method names that are very short are not have any meaning that help other developer or testers need to be Change the name to Equality_ instance
     public static boolean eq(Object x, Object y)
     {
         if (x == null || x == Undefined.instance) {
