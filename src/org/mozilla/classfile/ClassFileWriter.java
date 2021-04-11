@@ -492,6 +492,7 @@ public class ClassFileWriter {
             case ByteCode.JSR :
             case ByteCode.IFNULL :
             case ByteCode.IFNONNULL : {
+                //FIXME:the extra parentheses is unnecessary and removing them will make the code more easy to read .
                     if ((theOperand & 0x80000000) != 0x80000000) {
                         if ((theOperand < 0) || (theOperand > 65535))
                             throw new IllegalArgumentException(
