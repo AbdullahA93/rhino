@@ -686,7 +686,8 @@ public class ClassFileWriter {
                 throw new ClassFileFormatException("out of range variable");
             if (!(0 <= theOperand2 && theOperand2 < 65536))
                 throw new ClassFileFormatException("out of range increment");
-
+            //TODO: (theOperand2 < -128) This condition always produces the same result as the value of the involved variable that was narrowed before.
+            //the condition can be removed
             if (theOperand1 > 255 || theOperand2 < -128 || theOperand2 > 127) {
                 addToCodeBuffer(ByteCode.WIDE);
                 addToCodeBuffer(ByteCode.IINC);
