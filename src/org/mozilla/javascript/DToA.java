@@ -660,6 +660,7 @@ class DToA {
                 ilim1 = i - 1;
                 if (i <= 0)
                     i = 1;
+
         }
         /* ilim is the maximum number of significant digits we want, based on k and ndigits. */
         /* ilim1 is the maximum number of significant digits we want, based on k and ndigits,
