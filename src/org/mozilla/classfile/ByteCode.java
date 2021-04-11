@@ -45,6 +45,7 @@ package org.mozilla.classfile;
  *
  * @author Roger Lawrence
  */
+//FIXME:class declarations name which must not match the regex that applies to their specific kind (e.g. enum or interface or Byte) need to change the name
 public class ByteCode {
 
     /**
