@@ -2682,8 +2682,7 @@ public class ScriptRuntime {
      *
      * See ECMA 11.9
      */
-    //FIXME:Method names that are very short are not have any meaning that help other developer or testers need to be Change the name to Equality_ instance
-    public static boolean eq(Object x, Object y)
+    public static boolean equalityInstance(Object x, Object y)
     {
         if (x == null || x == Undefined.instance) {
             if (y == null || y == Undefined.instance) {
@@ -2736,8 +2735,7 @@ public class ScriptRuntime {
                     Object unwrappedY = ((Wrapper)y).unwrap();
                     return unwrappedX == unwrappedY ||
                            (isPrimitive(unwrappedX) &&
-                            isPrimitive(unwrappedY) &&
-                            eq(unwrappedX, unwrappedY));
+                            isPrimitive(unwrappedY) && equalityInstance(unwrappedX, unwrappedY));
                 }
                 return false;
             } else if (y instanceof Boolean) {
