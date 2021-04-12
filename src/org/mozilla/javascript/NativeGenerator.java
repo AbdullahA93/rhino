@@ -96,8 +96,7 @@ public final class NativeGenerator extends IdScriptableObject {
     /**
      * Close the generator if it is still open.
      */
-    //FIXME :In Java the finalizers It's should be not public Change class's finalize() from public to protect
-    public void finalize() throws Throwable {
+    protected  void finalize() throws Throwable {
         if (savedState != null) {
             // This is a little tricky since we are most likely running in
             // a different thread. We need to get a Context to run this, and
