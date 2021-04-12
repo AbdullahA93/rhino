@@ -492,9 +492,8 @@ public class ClassFileWriter {
             case ByteCode.JSR :
             case ByteCode.IFNULL :
             case ByteCode.IFNONNULL : {
-                //FIXME:the extra parentheses is unnecessary and removing them will make the code more easy to read .
                     if ((theOperand & 0x80000000) != 0x80000000) {
-                        if ((theOperand < 0) || (theOperand > 65535))
+                        if (theOperand < 0 || theOperand > 65535)
                             throw new IllegalArgumentException(
                                 "Bad label for branch");
                     }
@@ -688,7 +687,7 @@ public class ClassFileWriter {
             if (!(0 <= theOperand2 && theOperand2 < 65536))
                 throw new ClassFileFormatException("out of range increment");
 
-            if (theOperand1 > 255 || theOperand2 < -128 || theOperand2 > 127) {
+            if (theOperand1 > 255 || theOperand2 > 127) {
                 addToCodeBuffer(ByteCode.WIDE);
                 addToCodeBuffer(ByteCode.IINC);
                 addToCodeInt16(theOperand1);
