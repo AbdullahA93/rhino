@@ -46,7 +46,7 @@ import java.security.SecureClassLoader;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import org.mozilla.classfile.ByteCode;
+import org.mozilla.classfile.OperationCode;
 import org.mozilla.classfile.ClassFileWriter;
 
 /**
@@ -196,9 +196,9 @@ public class PolicySecurityController extends SecurityController
                 "<generated>");
         cfw.startMethod("<init>", "()V", ClassFileWriter.ACC_PUBLIC);
         cfw.addALoad(0);
-        cfw.addInvoke(ByteCode.INVOKESPECIAL, secureCallerClassName, 
+        cfw.addInvoke(OperationCode.INVOKESPECIAL, secureCallerClassName,
                 "<init>", "()V");
-        cfw.add(ByteCode.RETURN);
+        cfw.add(OperationCode.RETURN);
         cfw.stopMethod((short)1);
         String callableCallSig = 
             "Lorg/mozilla/javascript/Context;" +
@@ -213,10 +213,10 @@ public class PolicySecurityController extends SecurityController
         for(int i = 1; i < 6; ++i) {
             cfw.addALoad(i);
         }
-        cfw.addInvoke(ByteCode.INVOKEINTERFACE, 
+        cfw.addInvoke(OperationCode.INVOKEINTERFACE,
                 "org/mozilla/javascript/Callable", "call", 
                 "(" + callableCallSig);
-        cfw.add(ByteCode.ARETURN);
+        cfw.add(OperationCode.ARETURN);
         cfw.stopMethod((short)6);
         return cfw.toByteArray();
     }

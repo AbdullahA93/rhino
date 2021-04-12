@@ -589,35 +589,35 @@ public final class JavaAdapter implements IdFunctionCall
                         ClassFileWriter.ACC_PUBLIC);
 
         // Invoke base class constructor
-        cfw.add(ByteCode.ALOAD_0);  // this
-        cfw.addInvoke(ByteCode.INVOKESPECIAL, superName, "<init>", "()V");
+        cfw.add(OperationCode.ALOAD_0);  // this
+        cfw.addInvoke(OperationCode.INVOKESPECIAL, superName, "<init>", "()V");
 
         // Save parameter in instance variable "factory"
-        cfw.add(ByteCode.ALOAD_0);  // this
-        cfw.add(ByteCode.ALOAD_1);  // first arg: ContextFactory instance
-        cfw.add(ByteCode.PUTFIELD, adapterName, "factory",
+        cfw.add(OperationCode.ALOAD_0);  // this
+        cfw.add(OperationCode.ALOAD_1);  // first arg: ContextFactory instance
+        cfw.add(OperationCode.PUTFIELD, adapterName, "factory",
                 "Lorg/mozilla/javascript/ContextFactory;");
 
         // Save parameter in instance variable "delegee"
-        cfw.add(ByteCode.ALOAD_0);  // this
-        cfw.add(ByteCode.ALOAD_2);  // second arg: Scriptable delegee
-        cfw.add(ByteCode.PUTFIELD, adapterName, "delegee",
+        cfw.add(OperationCode.ALOAD_0);  // this
+        cfw.add(OperationCode.ALOAD_2);  // second arg: Scriptable delegee
+        cfw.add(OperationCode.PUTFIELD, adapterName, "delegee",
                 "Lorg/mozilla/javascript/Scriptable;");
 
-        cfw.add(ByteCode.ALOAD_0);  // this for the following PUTFIELD for self
+        cfw.add(OperationCode.ALOAD_0);  // this for the following PUTFIELD for self
         // create a wrapper object to be used as "this" in method calls
-        cfw.add(ByteCode.ALOAD_2);  // the Scriptable delegee
-        cfw.add(ByteCode.ALOAD_0);  // this
-        cfw.addInvoke(ByteCode.INVOKESTATIC,
+        cfw.add(OperationCode.ALOAD_2);  // the Scriptable delegee
+        cfw.add(OperationCode.ALOAD_0);  // this
+        cfw.addInvoke(OperationCode.INVOKESTATIC,
                       "org/mozilla/javascript/JavaAdapter",
                       "createAdapterWrapper",
                       "(Lorg/mozilla/javascript/Scriptable;"
                       +"Ljava/lang/Object;"
                       +")Lorg/mozilla/javascript/Scriptable;");
-        cfw.add(ByteCode.PUTFIELD, adapterName, "self",
+        cfw.add(OperationCode.PUTFIELD, adapterName, "self",
                 "Lorg/mozilla/javascript/Scriptable;");
 
-        cfw.add(ByteCode.RETURN);
+        cfw.add(OperationCode.RETURN);
         cfw.stopMethod((short)3); // 3: this + factory + delegee
     }
 
@@ -633,27 +633,27 @@ public final class JavaAdapter implements IdFunctionCall
                         ClassFileWriter.ACC_PUBLIC);
 
         // Invoke base class constructor
-        cfw.add(ByteCode.ALOAD_0);  // this
-        cfw.addInvoke(ByteCode.INVOKESPECIAL, superName, "<init>", "()V");
+        cfw.add(OperationCode.ALOAD_0);  // this
+        cfw.addInvoke(OperationCode.INVOKESPECIAL, superName, "<init>", "()V");
 
         // Save parameter in instance variable "factory"
-        cfw.add(ByteCode.ALOAD_0);  // this
-        cfw.add(ByteCode.ALOAD_1);  // first arg: ContextFactory instance
-        cfw.add(ByteCode.PUTFIELD, adapterName, "factory",
+        cfw.add(OperationCode.ALOAD_0);  // this
+        cfw.add(OperationCode.ALOAD_1);  // first arg: ContextFactory instance
+        cfw.add(OperationCode.PUTFIELD, adapterName, "factory",
                 "Lorg/mozilla/javascript/ContextFactory;");
 
         // Save parameter in instance variable "delegee"
-        cfw.add(ByteCode.ALOAD_0);  // this
-        cfw.add(ByteCode.ALOAD_2);  // second arg: Scriptable delegee
-        cfw.add(ByteCode.PUTFIELD, adapterName, "delegee",
+        cfw.add(OperationCode.ALOAD_0);  // this
+        cfw.add(OperationCode.ALOAD_2);  // second arg: Scriptable delegee
+        cfw.add(OperationCode.PUTFIELD, adapterName, "delegee",
                 "Lorg/mozilla/javascript/Scriptable;");
         // save self
-        cfw.add(ByteCode.ALOAD_0);  // this
-        cfw.add(ByteCode.ALOAD_3);  // second arg: Scriptable self
-        cfw.add(ByteCode.PUTFIELD, adapterName, "self",
+        cfw.add(OperationCode.ALOAD_0);  // this
+        cfw.add(OperationCode.ALOAD_3);  // second arg: Scriptable self
+        cfw.add(OperationCode.PUTFIELD, adapterName, "self",
                 "Lorg/mozilla/javascript/Scriptable;");
 
-        cfw.add(ByteCode.RETURN);
+        cfw.add(OperationCode.RETURN);
         cfw.stopMethod((short)4); // 4: this + factory + delegee + self
     }
 
@@ -665,48 +665,48 @@ public final class JavaAdapter implements IdFunctionCall
         cfw.startMethod("<init>", "()V", ClassFileWriter.ACC_PUBLIC);
 
         // Invoke base class constructor
-        cfw.add(ByteCode.ALOAD_0);  // this
-        cfw.addInvoke(ByteCode.INVOKESPECIAL, superName, "<init>", "()V");
+        cfw.add(OperationCode.ALOAD_0);  // this
+        cfw.addInvoke(OperationCode.INVOKESPECIAL, superName, "<init>", "()V");
 
         // Set factory to null to use current global when necessary
-        cfw.add(ByteCode.ALOAD_0);
-        cfw.add(ByteCode.ACONST_NULL);
-        cfw.add(ByteCode.PUTFIELD, adapterName, "factory",
+        cfw.add(OperationCode.ALOAD_0);
+        cfw.add(OperationCode.ACONST_NULL);
+        cfw.add(OperationCode.PUTFIELD, adapterName, "factory",
                 "Lorg/mozilla/javascript/ContextFactory;");
 
         // Load script class
-        cfw.add(ByteCode.NEW, scriptClassName);
-        cfw.add(ByteCode.DUP);
-        cfw.addInvoke(ByteCode.INVOKESPECIAL, scriptClassName, "<init>", "()V");
+        cfw.add(OperationCode.NEW, scriptClassName);
+        cfw.add(OperationCode.DUP);
+        cfw.addInvoke(OperationCode.INVOKESPECIAL, scriptClassName, "<init>", "()V");
 
         // Run script and save resulting scope
-        cfw.addInvoke(ByteCode.INVOKESTATIC,
+        cfw.addInvoke(OperationCode.INVOKESTATIC,
                       "org/mozilla/javascript/JavaAdapter",
                       "runScript",
                       "(Lorg/mozilla/javascript/Script;"
                       +")Lorg/mozilla/javascript/Scriptable;");
-        cfw.add(ByteCode.ASTORE_1);
+        cfw.add(OperationCode.ASTORE_1);
 
         // Save the Scriptable in instance variable "delegee"
-        cfw.add(ByteCode.ALOAD_0);  // this
-        cfw.add(ByteCode.ALOAD_1);  // the Scriptable
-        cfw.add(ByteCode.PUTFIELD, adapterName, "delegee",
+        cfw.add(OperationCode.ALOAD_0);  // this
+        cfw.add(OperationCode.ALOAD_1);  // the Scriptable
+        cfw.add(OperationCode.PUTFIELD, adapterName, "delegee",
                 "Lorg/mozilla/javascript/Scriptable;");
 
-        cfw.add(ByteCode.ALOAD_0);  // this for the following PUTFIELD for self
+        cfw.add(OperationCode.ALOAD_0);  // this for the following PUTFIELD for self
         // create a wrapper object to be used as "this" in method calls
-        cfw.add(ByteCode.ALOAD_1);  // the Scriptable
-        cfw.add(ByteCode.ALOAD_0);  // this
-        cfw.addInvoke(ByteCode.INVOKESTATIC,
+        cfw.add(OperationCode.ALOAD_1);  // the Scriptable
+        cfw.add(OperationCode.ALOAD_0);  // this
+        cfw.addInvoke(OperationCode.INVOKESTATIC,
                       "org/mozilla/javascript/JavaAdapter",
                       "createAdapterWrapper",
                       "(Lorg/mozilla/javascript/Scriptable;"
                       +"Ljava/lang/Object;"
                       +")Lorg/mozilla/javascript/Scriptable;");
-        cfw.add(ByteCode.PUTFIELD, adapterName, "self",
+        cfw.add(OperationCode.PUTFIELD, adapterName, "self",
                 "Lorg/mozilla/javascript/Scriptable;");
 
-        cfw.add(ByteCode.RETURN);
+        cfw.add(OperationCode.RETURN);
         cfw.stopMethod((short)2); // this + delegee
     }
 
@@ -721,13 +721,13 @@ public final class JavaAdapter implements IdFunctionCall
     {
         // push arguments
         cfw.addPush(arrayLength);
-        cfw.add(ByteCode.ANEWARRAY, "java/lang/Object");
+        cfw.add(OperationCode.ANEWARRAY, "java/lang/Object");
         int paramOffset = 1;
         for (int i = 0; i != argTypes.length; ++i) {
-            cfw.add(ByteCode.DUP); // duplicate array reference
+            cfw.add(OperationCode.DUP); // duplicate array reference
             cfw.addPush(i);
             paramOffset += generateWrapArg(cfw, paramOffset, argTypes[i]);
-            cfw.add(ByteCode.AASTORE);
+            cfw.add(OperationCode.AASTORE);
         }
     }
 
@@ -741,52 +741,52 @@ public final class JavaAdapter implements IdFunctionCall
     {
         int size = 1;
         if (!argType.isPrimitive()) {
-            cfw.add(ByteCode.ALOAD, paramOffset);
+            cfw.add(OperationCode.ALOAD, paramOffset);
 
         } else if (argType == Boolean.TYPE) {
             // wrap boolean values with java.lang.Boolean.
-            cfw.add(ByteCode.NEW, "java/lang/Boolean");
-            cfw.add(ByteCode.DUP);
-            cfw.add(ByteCode.ILOAD, paramOffset);
-            cfw.addInvoke(ByteCode.INVOKESPECIAL, "java/lang/Boolean",
+            cfw.add(OperationCode.NEW, "java/lang/Boolean");
+            cfw.add(OperationCode.DUP);
+            cfw.add(OperationCode.ILOAD, paramOffset);
+            cfw.addInvoke(OperationCode.INVOKESPECIAL, "java/lang/Boolean",
                           "<init>", "(Z)V");
 
         } else if (argType == Character.TYPE) {
             // Create a string of length 1 using the character parameter.
-            cfw.add(ByteCode.ILOAD, paramOffset);
-            cfw.addInvoke(ByteCode.INVOKESTATIC, "java/lang/String",
+            cfw.add(OperationCode.ILOAD, paramOffset);
+            cfw.addInvoke(OperationCode.INVOKESTATIC, "java/lang/String",
                           "valueOf", "(C)Ljava/lang/String;");
 
         } else {
             // convert all numeric values to java.lang.Double.
-            cfw.add(ByteCode.NEW, "java/lang/Double");
-            cfw.add(ByteCode.DUP);
+            cfw.add(OperationCode.NEW, "java/lang/Double");
+            cfw.add(OperationCode.DUP);
             String typeName = argType.getName();
             switch (typeName.charAt(0)) {
             case 'b':
             case 's':
             case 'i':
                 // load an int value, convert to double.
-                cfw.add(ByteCode.ILOAD, paramOffset);
-                cfw.add(ByteCode.I2D);
+                cfw.add(OperationCode.ILOAD, paramOffset);
+                cfw.add(OperationCode.I2D);
                 break;
             case 'l':
                 // load a long, convert to double.
-                cfw.add(ByteCode.LLOAD, paramOffset);
-                cfw.add(ByteCode.L2D);
+                cfw.add(OperationCode.LLOAD, paramOffset);
+                cfw.add(OperationCode.L2D);
                 size = 2;
                 break;
             case 'f':
                 // load a float, convert to double.
-                cfw.add(ByteCode.FLOAD, paramOffset);
-                cfw.add(ByteCode.F2D);
+                cfw.add(OperationCode.FLOAD, paramOffset);
+                cfw.add(OperationCode.F2D);
                 break;
             case 'd':
-                cfw.add(ByteCode.DLOAD, paramOffset);
+                cfw.add(OperationCode.DLOAD, paramOffset);
                 size = 2;
                 break;
             }
-            cfw.addInvoke(ByteCode.INVOKESPECIAL, "java/lang/Double",
+            cfw.addInvoke(OperationCode.INVOKESPECIAL, "java/lang/Double",
                           "<init>", "(D)V");
         }
         return size;
@@ -803,30 +803,30 @@ public final class JavaAdapter implements IdFunctionCall
         // wrap boolean values with java.lang.Boolean, convert all other
         // primitive values to java.lang.Double.
         if (retType == Void.TYPE) {
-            cfw.add(ByteCode.POP);
-            cfw.add(ByteCode.RETURN);
+            cfw.add(OperationCode.POP);
+            cfw.add(OperationCode.RETURN);
 
         } else if (retType == Boolean.TYPE) {
-            cfw.addInvoke(ByteCode.INVOKESTATIC,
+            cfw.addInvoke(OperationCode.INVOKESTATIC,
                           "org/mozilla/javascript/Context",
                           "toBoolean", "(Ljava/lang/Object;)Z");
-            cfw.add(ByteCode.IRETURN);
+            cfw.add(OperationCode.IRETURN);
 
         } else if (retType == Character.TYPE) {
             // characters are represented as strings in JavaScript.
             // return the first character.
             // first convert the value to a string if possible.
-            cfw.addInvoke(ByteCode.INVOKESTATIC,
+            cfw.addInvoke(OperationCode.INVOKESTATIC,
                           "org/mozilla/javascript/Context",
                           "toString",
                           "(Ljava/lang/Object;)Ljava/lang/String;");
-            cfw.add(ByteCode.ICONST_0);
-            cfw.addInvoke(ByteCode.INVOKEVIRTUAL, "java/lang/String",
+            cfw.add(OperationCode.ICONST_0);
+            cfw.addInvoke(OperationCode.INVOKEVIRTUAL, "java/lang/String",
                           "charAt", "(I)C");
-            cfw.add(ByteCode.IRETURN);
+            cfw.add(OperationCode.IRETURN);
 
         } else if (retType.isPrimitive()) {
-            cfw.addInvoke(ByteCode.INVOKESTATIC,
+            cfw.addInvoke(OperationCode.INVOKESTATIC,
                           "org/mozilla/javascript/Context",
                           "toNumber", "(Ljava/lang/Object;)D");
             String typeName = retType.getName();
@@ -834,19 +834,19 @@ public final class JavaAdapter implements IdFunctionCall
             case 'b':
             case 's':
             case 'i':
-                cfw.add(ByteCode.D2I);
-                cfw.add(ByteCode.IRETURN);
+                cfw.add(OperationCode.D2I);
+                cfw.add(OperationCode.IRETURN);
                 break;
             case 'l':
-                cfw.add(ByteCode.D2L);
-                cfw.add(ByteCode.LRETURN);
+                cfw.add(OperationCode.D2L);
+                cfw.add(OperationCode.LRETURN);
                 break;
             case 'f':
-                cfw.add(ByteCode.D2F);
-                cfw.add(ByteCode.FRETURN);
+                cfw.add(OperationCode.D2F);
+                cfw.add(OperationCode.FRETURN);
                 break;
             case 'd':
-                cfw.add(ByteCode.DRETURN);
+                cfw.add(OperationCode.DRETURN);
                 break;
             default:
                 throw new RuntimeException("Unexpected return type " +
@@ -857,12 +857,12 @@ public final class JavaAdapter implements IdFunctionCall
             String retTypeStr = retType.getName();
             if (callConvertResult) {
                 cfw.addLoadConstant(retTypeStr);
-                cfw.addInvoke(ByteCode.INVOKESTATIC,
+                cfw.addInvoke(OperationCode.INVOKESTATIC,
                               "java/lang/Class",
                               "forName",
                               "(Ljava/lang/String;)Ljava/lang/Class;");
 
-                cfw.addInvoke(ByteCode.INVOKESTATIC,
+                cfw.addInvoke(OperationCode.INVOKESTATIC,
                               "org/mozilla/javascript/JavaAdapter",
                               "convertResult",
                               "(Ljava/lang/Object;"
@@ -870,8 +870,8 @@ public final class JavaAdapter implements IdFunctionCall
                               +")Ljava/lang/Object;");
             }
             // Now cast to return type
-            cfw.add(ByteCode.CHECKCAST, retTypeStr);
-            cfw.add(ByteCode.ARETURN);
+            cfw.add(OperationCode.CHECKCAST, retTypeStr);
+            cfw.add(OperationCode.ARETURN);
         }
     }
 
@@ -888,21 +888,21 @@ public final class JavaAdapter implements IdFunctionCall
         // Prepare stack to call method
 
         // push factory
-        cfw.add(ByteCode.ALOAD_0);
-        cfw.add(ByteCode.GETFIELD, genName, "factory",
+        cfw.add(OperationCode.ALOAD_0);
+        cfw.add(OperationCode.GETFIELD, genName, "factory",
                 "Lorg/mozilla/javascript/ContextFactory;");
 
         // push self
-        cfw.add(ByteCode.ALOAD_0);
-        cfw.add(ByteCode.GETFIELD, genName, "self",
+        cfw.add(OperationCode.ALOAD_0);
+        cfw.add(OperationCode.GETFIELD, genName, "self",
                 "Lorg/mozilla/javascript/Scriptable;");
 
         // push function
-        cfw.add(ByteCode.ALOAD_0);
-        cfw.add(ByteCode.GETFIELD, genName, "delegee",
+        cfw.add(OperationCode.ALOAD_0);
+        cfw.add(OperationCode.GETFIELD, genName, "delegee",
                 "Lorg/mozilla/javascript/Scriptable;");
         cfw.addPush(methodName);
-        cfw.addInvoke(ByteCode.INVOKESTATIC,
+        cfw.addInvoke(OperationCode.INVOKESTATIC,
                       "org/mozilla/javascript/JavaAdapter",
                       "getFunction",
                       "(Lorg/mozilla/javascript/Scriptable;"
@@ -930,7 +930,7 @@ public final class JavaAdapter implements IdFunctionCall
 
         // go through utility method, which creates a Context to run the
         // method in.
-        cfw.addInvoke(ByteCode.INVOKESTATIC,
+        cfw.addInvoke(OperationCode.INVOKESTATIC,
                       "org/mozilla/javascript/JavaAdapter",
                       "callMethod",
                       "(Lorg/mozilla/javascript/ContextFactory;"
@@ -997,20 +997,20 @@ public final class JavaAdapter implements IdFunctionCall
             case 's':
             case 'i':
             case 'z':
-                cfw.add(ByteCode.IRETURN);
+                cfw.add(OperationCode.IRETURN);
                 break;
             case 'l':
-                cfw.add(ByteCode.LRETURN);
+                cfw.add(OperationCode.LRETURN);
                 break;
             case 'f':
-                cfw.add(ByteCode.FRETURN);
+                cfw.add(OperationCode.FRETURN);
                 break;
             case 'd':
-                cfw.add(ByteCode.DRETURN);
+                cfw.add(OperationCode.DRETURN);
                 break;
             }
         } else {
-            cfw.add(ByteCode.ARETURN);
+            cfw.add(OperationCode.ARETURN);
         }
     }
 
@@ -1028,7 +1028,7 @@ public final class JavaAdapter implements IdFunctionCall
                         ClassFileWriter.ACC_PUBLIC);
 
         // push "this"
-        cfw.add(ByteCode.ALOAD, 0);
+        cfw.add(OperationCode.ALOAD, 0);
 
         // push the rest of the parameters.
         int paramOffset = 1;
@@ -1037,7 +1037,7 @@ public final class JavaAdapter implements IdFunctionCall
         }
 
         // call the superclass implementation of the method.
-        cfw.addInvoke(ByteCode.INVOKESPECIAL,
+        cfw.addInvoke(OperationCode.INVOKESPECIAL,
                       superName,
                       methodName,
                       methodSignature);
@@ -1047,7 +1047,7 @@ public final class JavaAdapter implements IdFunctionCall
         if (!retType.equals(Void.TYPE)) {
             generatePopResult(cfw, retType);
         } else {
-            cfw.add(ByteCode.RETURN);
+            cfw.add(OperationCode.RETURN);
         }
         cfw.stopMethod((short)(paramOffset + 1));
     }

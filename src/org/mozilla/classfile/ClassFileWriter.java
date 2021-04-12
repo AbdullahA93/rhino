@@ -473,25 +473,25 @@ public class ClassFileWriter {
         if (newStack < 0 || Short.MAX_VALUE < newStack) badStack(newStack);
 
         switch (theOpCode) {
-            case ByteCode.GOTO :
+            case OperationCode.GOTO :
                 // fallthru...
-            case ByteCode.IFEQ :
-            case ByteCode.IFNE :
-            case ByteCode.IFLT :
-            case ByteCode.IFGE :
-            case ByteCode.IFGT :
-            case ByteCode.IFLE :
-            case ByteCode.IF_ICMPEQ :
-            case ByteCode.IF_ICMPNE :
-            case ByteCode.IF_ICMPLT :
-            case ByteCode.IF_ICMPGE :
-            case ByteCode.IF_ICMPGT :
-            case ByteCode.IF_ICMPLE :
-            case ByteCode.IF_ACMPEQ :
-            case ByteCode.IF_ACMPNE :
-            case ByteCode.JSR :
-            case ByteCode.IFNULL :
-            case ByteCode.IFNONNULL : {
+            case OperationCode.IFEQ :
+            case OperationCode.IFNE :
+            case OperationCode.IFLT :
+            case OperationCode.IFGE :
+            case OperationCode.IFGT :
+            case OperationCode.IFLE :
+            case OperationCode.IF_ICMPEQ :
+            case OperationCode.IF_ICMPNE :
+            case OperationCode.IF_ICMPLT :
+            case OperationCode.IF_ICMPGE :
+            case OperationCode.IF_ICMPGT :
+            case OperationCode.IF_ICMPLE :
+            case OperationCode.IF_ACMPEQ :
+            case OperationCode.IF_ACMPNE :
+            case OperationCode.JSR :
+            case OperationCode.IFNULL :
+            case OperationCode.IFNONNULL : {
                     if ((theOperand & 0x80000000) != 0x80000000) {
                         if (theOperand < 0 || theOperand > 65535)
                             throw new IllegalArgumentException(
@@ -523,46 +523,46 @@ public class ClassFileWriter {
                 }
                 break;
 
-            case ByteCode.BIPUSH :
+            case OperationCode.BIPUSH :
                 if ((byte)theOperand != theOperand)
                     throw new IllegalArgumentException("out of range byte");
                 addToCodeBuffer(theOpCode);
                 addToCodeBuffer((byte)theOperand);
                 break;
 
-            case ByteCode.SIPUSH :
+            case OperationCode.SIPUSH :
                 if ((short)theOperand != theOperand)
                     throw new IllegalArgumentException("out of range short");
                 addToCodeBuffer(theOpCode);
                    addToCodeInt16(theOperand);
                 break;
 
-            case ByteCode.NEWARRAY :
+            case OperationCode.NEWARRAY :
                 if (!(0 <= theOperand && theOperand < 256))
                     throw new IllegalArgumentException("out of range index");
                 addToCodeBuffer(theOpCode);
                 addToCodeBuffer(theOperand);
                 break;
 
-            case ByteCode.GETFIELD :
-            case ByteCode.PUTFIELD :
+            case OperationCode.GETFIELD :
+            case OperationCode.PUTFIELD :
                 if (!(0 <= theOperand && theOperand < 65536))
                     throw new IllegalArgumentException("out of range field");
                 addToCodeBuffer(theOpCode);
                 addToCodeInt16(theOperand);
                 break;
 
-            case ByteCode.LDC :
-            case ByteCode.LDC_W :
-            case ByteCode.LDC2_W :
+            case OperationCode.LDC :
+            case OperationCode.LDC_W :
+            case OperationCode.LDC2_W :
                 if (!(0 <= theOperand && theOperand < 65536))
                     throw new IllegalArgumentException("out of range index");
                 if (theOperand >= 256
-                    || theOpCode == ByteCode.LDC_W
-                    || theOpCode == ByteCode.LDC2_W)
+                    || theOpCode == OperationCode.LDC_W
+                    || theOpCode == OperationCode.LDC2_W)
                 {
-                    if (theOpCode == ByteCode.LDC) {
-                        addToCodeBuffer(ByteCode.LDC_W);
+                    if (theOpCode == OperationCode.LDC) {
+                        addToCodeBuffer(OperationCode.LDC_W);
                     } else {
                         addToCodeBuffer(theOpCode);
                     }
@@ -573,21 +573,21 @@ public class ClassFileWriter {
                 }
                 break;
 
-            case ByteCode.RET :
-            case ByteCode.ILOAD :
-            case ByteCode.LLOAD :
-            case ByteCode.FLOAD :
-            case ByteCode.DLOAD :
-            case ByteCode.ALOAD :
-            case ByteCode.ISTORE :
-            case ByteCode.LSTORE :
-            case ByteCode.FSTORE :
-            case ByteCode.DSTORE :
-            case ByteCode.ASTORE :
+            case OperationCode.RET :
+            case OperationCode.ILOAD :
+            case OperationCode.LLOAD :
+            case OperationCode.FLOAD :
+            case OperationCode.DLOAD :
+            case OperationCode.ALOAD :
+            case OperationCode.ISTORE :
+            case OperationCode.LSTORE :
+            case OperationCode.FSTORE :
+            case OperationCode.DSTORE :
+            case OperationCode.ASTORE :
                 if (!(0 <= theOperand && theOperand < 65536))
                     throw new ClassFileFormatException("out of range variable");
                 if (theOperand >= 256) {
-                    addToCodeBuffer(ByteCode.WIDE);
+                    addToCodeBuffer(OperationCode.WIDE);
                     addToCodeBuffer(theOpCode);
                     addToCodeInt16(theOperand);
                 }
@@ -617,14 +617,14 @@ public class ClassFileWriter {
      */
     public void addLoadConstant(int k) {
         switch (k) {
-            case 0: add(ByteCode.ICONST_0); break;
-            case 1: add(ByteCode.ICONST_1); break;
-            case 2: add(ByteCode.ICONST_2); break;
-            case 3: add(ByteCode.ICONST_3); break;
-            case 4: add(ByteCode.ICONST_4); break;
-            case 5: add(ByteCode.ICONST_5); break;
+            case 0: add(OperationCode.ICONST_0); break;
+            case 1: add(OperationCode.ICONST_1); break;
+            case 2: add(OperationCode.ICONST_2); break;
+            case 3: add(OperationCode.ICONST_3); break;
+            case 4: add(OperationCode.ICONST_4); break;
+            case 5: add(OperationCode.ICONST_5); break;
             default:
-                add(ByteCode.LDC, itsConstantPool.addConstant(k));
+                add(OperationCode.LDC, itsConstantPool.addConstant(k));
                 break;
         }
     }
@@ -635,7 +635,7 @@ public class ClassFileWriter {
      * @param k the constant
      */
     public void addLoadConstant(long k) {
-        add(ByteCode.LDC2_W, itsConstantPool.addConstant(k));
+        add(OperationCode.LDC2_W, itsConstantPool.addConstant(k));
     }
 
     /**
@@ -644,7 +644,7 @@ public class ClassFileWriter {
      * @param k the constant
      */
     public void addLoadConstant(float k) {
-        add(ByteCode.LDC, itsConstantPool.addConstant(k));
+        add(OperationCode.LDC, itsConstantPool.addConstant(k));
     }
 
     /**
@@ -653,7 +653,7 @@ public class ClassFileWriter {
      * @param k the constant
      */
     public void addLoadConstant(double k) {
-        add(ByteCode.LDC2_W, itsConstantPool.addConstant(k));
+        add(OperationCode.LDC2_W, itsConstantPool.addConstant(k));
     }
 
     /**
@@ -662,7 +662,7 @@ public class ClassFileWriter {
      * @param k the constant
      */
     public void addLoadConstant(String k) {
-        add(ByteCode.LDC, itsConstantPool.addConstant(k));
+        add(OperationCode.LDC, itsConstantPool.addConstant(k));
     }
 
     /**
@@ -681,32 +681,32 @@ public class ClassFileWriter {
         int newStack = itsStackTop + stackChange(theOpCode);
         if (newStack < 0 || Short.MAX_VALUE < newStack) badStack(newStack);
 
-        if (theOpCode == ByteCode.IINC) {
+        if (theOpCode == OperationCode.IINC) {
             if (!(0 <= theOperand1 && theOperand1 < 65536))
                 throw new ClassFileFormatException("out of range variable");
             if (!(0 <= theOperand2 && theOperand2 < 65536))
                 throw new ClassFileFormatException("out of range increment");
 
             if (theOperand1 > 255 || theOperand2 > 127) {
-                addToCodeBuffer(ByteCode.WIDE);
-                addToCodeBuffer(ByteCode.IINC);
+                addToCodeBuffer(OperationCode.WIDE);
+                addToCodeBuffer(OperationCode.IINC);
                 addToCodeInt16(theOperand1);
                 addToCodeInt16(theOperand2);
             }
             else {
-                addToCodeBuffer(ByteCode.WIDE);
-                addToCodeBuffer(ByteCode.IINC);
+                addToCodeBuffer(OperationCode.WIDE);
+                addToCodeBuffer(OperationCode.IINC);
                 addToCodeBuffer(theOperand1);
                 addToCodeBuffer(theOperand2);
             }
         }
-        else if (theOpCode == ByteCode.MULTIANEWARRAY) {
+        else if (theOpCode == OperationCode.MULTIANEWARRAY) {
             if (!(0 <= theOperand1 && theOperand1 < 65536))
                 throw new IllegalArgumentException("out of range index");
             if (!(0 <= theOperand2 && theOperand2 < 256))
                 throw new IllegalArgumentException("out of range dimensions");
 
-            addToCodeBuffer(ByteCode.MULTIANEWARRAY);
+            addToCodeBuffer(OperationCode.MULTIANEWARRAY);
             addToCodeInt16(theOperand1);
             addToCodeBuffer(theOperand2);
         }
@@ -731,10 +731,10 @@ public class ClassFileWriter {
         int newStack = itsStackTop + stackChange(theOpCode);
         if (newStack < 0 || Short.MAX_VALUE < newStack) badStack(newStack);
         switch (theOpCode) {
-            case ByteCode.NEW :
-            case ByteCode.ANEWARRAY :
-            case ByteCode.CHECKCAST :
-            case ByteCode.INSTANCEOF : {
+            case OperationCode.NEW :
+            case OperationCode.ANEWARRAY :
+            case OperationCode.CHECKCAST :
+            case OperationCode.INSTANCEOF : {
                 short classIndex = itsConstantPool.addClass(className);
                 addToCodeBuffer(theOpCode);
                 addToCodeInt16(classIndex);
@@ -766,12 +766,12 @@ public class ClassFileWriter {
         int fieldSize = (fieldTypeChar == 'J' || fieldTypeChar == 'D')
                         ? 2 : 1;
         switch (theOpCode) {
-            case ByteCode.GETFIELD :
-            case ByteCode.GETSTATIC :
+            case OperationCode.GETFIELD :
+            case OperationCode.GETSTATIC :
                 newStack += fieldSize;
                 break;
-            case ByteCode.PUTSTATIC :
-            case ByteCode.PUTFIELD :
+            case OperationCode.PUTSTATIC :
+            case OperationCode.PUTFIELD :
                 newStack -= fieldSize;
                 break;
             default :
@@ -809,12 +809,12 @@ public class ClassFileWriter {
         if (newStack < 0 || Short.MAX_VALUE < newStack) badStack(newStack);
 
         switch (theOpCode) {
-            case ByteCode.INVOKEVIRTUAL :
-            case ByteCode.INVOKESPECIAL :
-            case ByteCode.INVOKESTATIC :
-            case ByteCode.INVOKEINTERFACE : {
+            case OperationCode.INVOKEVIRTUAL :
+            case OperationCode.INVOKESPECIAL :
+            case OperationCode.INVOKESTATIC :
+            case OperationCode.INVOKEINTERFACE : {
                     addToCodeBuffer(theOpCode);
-                    if (theOpCode == ByteCode.INVOKEINTERFACE) {
+                    if (theOpCode == OperationCode.INVOKEINTERFACE) {
                         short ifMethodRefIndex
                                     = itsConstantPool.addInterfaceMethodRef(
                                                className, methodName,
@@ -853,14 +853,14 @@ public class ClassFileWriter {
     {
         if ((byte)k == k) {
             if (k == -1) {
-                add(ByteCode.ICONST_M1);
+                add(OperationCode.ICONST_M1);
             } else if (0 <= k && k <= 5) {
-                add((byte)(ByteCode.ICONST_0 + k));
+                add((byte)(OperationCode.ICONST_0 + k));
             } else {
-                add(ByteCode.BIPUSH, (byte)k);
+                add(OperationCode.BIPUSH, (byte)k);
             }
         } else if ((short)k == k) {
-            add(ByteCode.SIPUSH, (short)k);
+            add(OperationCode.SIPUSH, (short)k);
         } else {
             addLoadConstant(k);
         }
@@ -868,7 +868,7 @@ public class ClassFileWriter {
 
     public void addPush(boolean k)
     {
-        add(k ? ByteCode.ICONST_1 : ByteCode.ICONST_0);
+        add(k ? OperationCode.ICONST_1 : OperationCode.ICONST_0);
     }
 
     /**
@@ -881,7 +881,7 @@ public class ClassFileWriter {
         int ik = (int)k;
         if (ik == k) {
             addPush(ik);
-            add(ByteCode.I2L);
+            add(OperationCode.I2L);
         } else {
             addLoadConstant(k);
         }
@@ -896,15 +896,15 @@ public class ClassFileWriter {
     {
         if (k == 0.0) {
             // zero
-            add(ByteCode.DCONST_0);
+            add(OperationCode.DCONST_0);
             if (1.0 / k < 0) {
                 // Negative zero
-                add(ByteCode.DNEG);
+                add(OperationCode.DNEG);
             }
         } else if (k == 1.0 || k == -1.0) {
-            add(ByteCode.DCONST_1);
+            add(OperationCode.DCONST_1);
             if (k < 0) {
-                add(ByteCode.DNEG);
+                add(OperationCode.DNEG);
             }
         } else {
             addLoadConstant(k);
@@ -931,25 +931,25 @@ public class ClassFileWriter {
         // sb.append(loadConstant(piece_N));
         // sb.toString();
         final String SB = "java/lang/StringBuffer";
-        add(ByteCode.NEW, SB);
-        add(ByteCode.DUP);
+        add(OperationCode.NEW, SB);
+        add(OperationCode.DUP);
         addPush(length);
-        addInvoke(ByteCode.INVOKESPECIAL, SB, "<init>", "(I)V");
+        addInvoke(OperationCode.INVOKESPECIAL, SB, "<init>", "(I)V");
         int cursor = 0;
         for (;;) {
-            add(ByteCode.DUP);
+            add(OperationCode.DUP);
             String s = k.substring(cursor, limit);
             addLoadConstant(s);
-            addInvoke(ByteCode.INVOKEVIRTUAL, SB, "append",
+            addInvoke(OperationCode.INVOKEVIRTUAL, SB, "append",
                       "(Ljava/lang/String;)Ljava/lang/StringBuffer;");
-            add(ByteCode.POP);
+            add(OperationCode.POP);
             if (limit == length) {
                 break;
             }
             cursor = limit;
             limit = itsConstantPool.getUtfEncodingLimit(k, limit, length);
         }
-        addInvoke(ByteCode.INVOKEVIRTUAL, SB, "toString",
+        addInvoke(OperationCode.INVOKEVIRTUAL, SB, "toString",
                   "()Ljava/lang/String;");
     }
 
@@ -971,7 +971,7 @@ public class ClassFileWriter {
      */
     public void addIStore(int local)
     {
-        xop(ByteCode.ISTORE_0, ByteCode.ISTORE, local);
+        xop(OperationCode.ISTORE_0, OperationCode.ISTORE, local);
     }
 
     /**
@@ -981,7 +981,7 @@ public class ClassFileWriter {
      */
     public void addLStore(int local)
     {
-        xop(ByteCode.LSTORE_0, ByteCode.LSTORE, local);
+        xop(OperationCode.LSTORE_0, OperationCode.LSTORE, local);
     }
 
     /**
@@ -991,7 +991,7 @@ public class ClassFileWriter {
      */
     public void addFStore(int local)
     {
-        xop(ByteCode.FSTORE_0, ByteCode.FSTORE, local);
+        xop(OperationCode.FSTORE_0, OperationCode.FSTORE, local);
     }
 
     /**
@@ -1001,7 +1001,7 @@ public class ClassFileWriter {
      */
     public void addDStore(int local)
     {
-        xop(ByteCode.DSTORE_0, ByteCode.DSTORE, local);
+        xop(OperationCode.DSTORE_0, OperationCode.DSTORE, local);
     }
 
     /**
@@ -1011,7 +1011,7 @@ public class ClassFileWriter {
      */
     public void addAStore(int local)
     {
-        xop(ByteCode.ASTORE_0, ByteCode.ASTORE, local);
+        xop(OperationCode.ASTORE_0, OperationCode.ASTORE, local);
     }
 
     /**
@@ -1021,7 +1021,7 @@ public class ClassFileWriter {
      */
     public void addILoad(int local)
     {
-        xop(ByteCode.ILOAD_0, ByteCode.ILOAD, local);
+        xop(OperationCode.ILOAD_0, OperationCode.ILOAD, local);
     }
 
     /**
@@ -1031,7 +1031,7 @@ public class ClassFileWriter {
      */
     public void addLLoad(int local)
     {
-        xop(ByteCode.LLOAD_0, ByteCode.LLOAD, local);
+        xop(OperationCode.LLOAD_0, OperationCode.LLOAD, local);
     }
 
     /**
@@ -1041,7 +1041,7 @@ public class ClassFileWriter {
      */
     public void addFLoad(int local)
     {
-        xop(ByteCode.FLOAD_0, ByteCode.FLOAD, local);
+        xop(OperationCode.FLOAD_0, OperationCode.FLOAD, local);
     }
 
     /**
@@ -1051,7 +1051,7 @@ public class ClassFileWriter {
      */
     public void addDLoad(int local)
     {
-        xop(ByteCode.DLOAD_0, ByteCode.DLOAD, local);
+        xop(OperationCode.DLOAD_0, OperationCode.DLOAD, local);
     }
 
     /**
@@ -1061,7 +1061,7 @@ public class ClassFileWriter {
      */
     public void addALoad(int local)
     {
-        xop(ByteCode.ALOAD_0, ByteCode.ALOAD, local);
+        xop(OperationCode.ALOAD_0, OperationCode.ALOAD, local);
     }
 
     /**
@@ -1069,7 +1069,7 @@ public class ClassFileWriter {
      */
     public void addLoadThis()
     {
-        add(ByteCode.ALOAD_0);
+        add(OperationCode.ALOAD_0);
     }
 
     private void xop(int shortOp, int op, int local)
@@ -1095,13 +1095,13 @@ public class ClassFileWriter {
     public int addTableSwitch(int low, int high)
     {
         if (DEBUGCODE) {
-            System.out.println("Add "+bytecodeStr(ByteCode.TABLESWITCH)
+            System.out.println("Add "+bytecodeStr(OperationCode.TABLESWITCH)
                                +" "+low+" "+high);
         }
         if (low > high)
             throw new ClassFileFormatException("Bad bounds: "+low+' '+ high);
 
-        int newStack = itsStackTop + stackChange(ByteCode.TABLESWITCH);
+        int newStack = itsStackTop + stackChange(OperationCode.TABLESWITCH);
         if (newStack < 0 || Short.MAX_VALUE < newStack) badStack(newStack);
 
         int entryCount = high - low + 1;
@@ -1109,7 +1109,7 @@ public class ClassFileWriter {
 
         int N = addReservedCodeSpace(1 + padSize + 4 * (1 + 2 + entryCount));
         int switchStart = N;
-        itsCodeBuffer[N++] = (byte)ByteCode.TABLESWITCH;
+        itsCodeBuffer[N++] = (byte)OperationCode.TABLESWITCH;
         while (padSize != 0) {
             itsCodeBuffer[N++] = 0;
             --padSize;
@@ -1121,7 +1121,7 @@ public class ClassFileWriter {
         itsStackTop = (short)newStack;
         if (newStack > itsMaxStack) itsMaxStack = (short)newStack;
         if (DEBUGSTACK) {
-            System.out.println("After "+bytecodeStr(ByteCode.TABLESWITCH)
+            System.out.println("After "+bytecodeStr(OperationCode.TABLESWITCH)
                                +" stack = "+itsStackTop);
         }
 
@@ -1170,7 +1170,7 @@ public class ClassFileWriter {
                 switchStart+" is outside a possible range of tableswitch"
                 +" in already generated code");
         }
-        if ((0xFF & itsCodeBuffer[switchStart]) != ByteCode.TABLESWITCH) {
+        if ((0xFF & itsCodeBuffer[switchStart]) != OperationCode.TABLESWITCH) {
             throw new IllegalArgumentException(
                 switchStart+" is not offset of tableswitch statement");
         }
@@ -1644,215 +1644,215 @@ public class ClassFileWriter {
     static int opcodeCount(int opcode)
     {
         switch (opcode) {
-            case ByteCode.AALOAD:
-            case ByteCode.AASTORE:
-            case ByteCode.ACONST_NULL:
-            case ByteCode.ALOAD_0:
-            case ByteCode.ALOAD_1:
-            case ByteCode.ALOAD_2:
-            case ByteCode.ALOAD_3:
-            case ByteCode.ARETURN:
-            case ByteCode.ARRAYLENGTH:
-            case ByteCode.ASTORE_0:
-            case ByteCode.ASTORE_1:
-            case ByteCode.ASTORE_2:
-            case ByteCode.ASTORE_3:
-            case ByteCode.ATHROW:
-            case ByteCode.BALOAD:
-            case ByteCode.BASTORE:
-            case ByteCode.BREAKPOINT:
-            case ByteCode.CALOAD:
-            case ByteCode.CASTORE:
-            case ByteCode.D2F:
-            case ByteCode.D2I:
-            case ByteCode.D2L:
-            case ByteCode.DADD:
-            case ByteCode.DALOAD:
-            case ByteCode.DASTORE:
-            case ByteCode.DCMPG:
-            case ByteCode.DCMPL:
-            case ByteCode.DCONST_0:
-            case ByteCode.DCONST_1:
-            case ByteCode.DDIV:
-            case ByteCode.DLOAD_0:
-            case ByteCode.DLOAD_1:
-            case ByteCode.DLOAD_2:
-            case ByteCode.DLOAD_3:
-            case ByteCode.DMUL:
-            case ByteCode.DNEG:
-            case ByteCode.DREM:
-            case ByteCode.DRETURN:
-            case ByteCode.DSTORE_0:
-            case ByteCode.DSTORE_1:
-            case ByteCode.DSTORE_2:
-            case ByteCode.DSTORE_3:
-            case ByteCode.DSUB:
-            case ByteCode.DUP:
-            case ByteCode.DUP2:
-            case ByteCode.DUP2_X1:
-            case ByteCode.DUP2_X2:
-            case ByteCode.DUP_X1:
-            case ByteCode.DUP_X2:
-            case ByteCode.F2D:
-            case ByteCode.F2I:
-            case ByteCode.F2L:
-            case ByteCode.FADD:
-            case ByteCode.FALOAD:
-            case ByteCode.FASTORE:
-            case ByteCode.FCMPG:
-            case ByteCode.FCMPL:
-            case ByteCode.FCONST_0:
-            case ByteCode.FCONST_1:
-            case ByteCode.FCONST_2:
-            case ByteCode.FDIV:
-            case ByteCode.FLOAD_0:
-            case ByteCode.FLOAD_1:
-            case ByteCode.FLOAD_2:
-            case ByteCode.FLOAD_3:
-            case ByteCode.FMUL:
-            case ByteCode.FNEG:
-            case ByteCode.FREM:
-            case ByteCode.FRETURN:
-            case ByteCode.FSTORE_0:
-            case ByteCode.FSTORE_1:
-            case ByteCode.FSTORE_2:
-            case ByteCode.FSTORE_3:
-            case ByteCode.FSUB:
-            case ByteCode.I2B:
-            case ByteCode.I2C:
-            case ByteCode.I2D:
-            case ByteCode.I2F:
-            case ByteCode.I2L:
-            case ByteCode.I2S:
-            case ByteCode.IADD:
-            case ByteCode.IALOAD:
-            case ByteCode.IAND:
-            case ByteCode.IASTORE:
-            case ByteCode.ICONST_0:
-            case ByteCode.ICONST_1:
-            case ByteCode.ICONST_2:
-            case ByteCode.ICONST_3:
-            case ByteCode.ICONST_4:
-            case ByteCode.ICONST_5:
-            case ByteCode.ICONST_M1:
-            case ByteCode.IDIV:
-            case ByteCode.ILOAD_0:
-            case ByteCode.ILOAD_1:
-            case ByteCode.ILOAD_2:
-            case ByteCode.ILOAD_3:
-            case ByteCode.IMPDEP1:
-            case ByteCode.IMPDEP2:
-            case ByteCode.IMUL:
-            case ByteCode.INEG:
-            case ByteCode.IOR:
-            case ByteCode.IREM:
-            case ByteCode.IRETURN:
-            case ByteCode.ISHL:
-            case ByteCode.ISHR:
-            case ByteCode.ISTORE_0:
-            case ByteCode.ISTORE_1:
-            case ByteCode.ISTORE_2:
-            case ByteCode.ISTORE_3:
-            case ByteCode.ISUB:
-            case ByteCode.IUSHR:
-            case ByteCode.IXOR:
-            case ByteCode.L2D:
-            case ByteCode.L2F:
-            case ByteCode.L2I:
-            case ByteCode.LADD:
-            case ByteCode.LALOAD:
-            case ByteCode.LAND:
-            case ByteCode.LASTORE:
-            case ByteCode.LCMP:
-            case ByteCode.LCONST_0:
-            case ByteCode.LCONST_1:
-            case ByteCode.LDIV:
-            case ByteCode.LLOAD_0:
-            case ByteCode.LLOAD_1:
-            case ByteCode.LLOAD_2:
-            case ByteCode.LLOAD_3:
-            case ByteCode.LMUL:
-            case ByteCode.LNEG:
-            case ByteCode.LOR:
-            case ByteCode.LREM:
-            case ByteCode.LRETURN:
-            case ByteCode.LSHL:
-            case ByteCode.LSHR:
-            case ByteCode.LSTORE_0:
-            case ByteCode.LSTORE_1:
-            case ByteCode.LSTORE_2:
-            case ByteCode.LSTORE_3:
-            case ByteCode.LSUB:
-            case ByteCode.LUSHR:
-            case ByteCode.LXOR:
-            case ByteCode.MONITORENTER:
-            case ByteCode.MONITOREXIT:
-            case ByteCode.NOP:
-            case ByteCode.POP:
-            case ByteCode.POP2:
-            case ByteCode.RETURN:
-            case ByteCode.SALOAD:
-            case ByteCode.SASTORE:
-            case ByteCode.SWAP:
-            case ByteCode.WIDE:
+            case OperationCode.AALOAD:
+            case OperationCode.AASTORE:
+            case OperationCode.ACONST_NULL:
+            case OperationCode.ALOAD_0:
+            case OperationCode.ALOAD_1:
+            case OperationCode.ALOAD_2:
+            case OperationCode.ALOAD_3:
+            case OperationCode.ARETURN:
+            case OperationCode.ARRAYLENGTH:
+            case OperationCode.ASTORE_0:
+            case OperationCode.ASTORE_1:
+            case OperationCode.ASTORE_2:
+            case OperationCode.ASTORE_3:
+            case OperationCode.ATHROW:
+            case OperationCode.BALOAD:
+            case OperationCode.BASTORE:
+            case OperationCode.BREAKPOINT:
+            case OperationCode.CALOAD:
+            case OperationCode.CASTORE:
+            case OperationCode.D2F:
+            case OperationCode.D2I:
+            case OperationCode.D2L:
+            case OperationCode.DADD:
+            case OperationCode.DALOAD:
+            case OperationCode.DASTORE:
+            case OperationCode.DCMPG:
+            case OperationCode.DCMPL:
+            case OperationCode.DCONST_0:
+            case OperationCode.DCONST_1:
+            case OperationCode.DDIV:
+            case OperationCode.DLOAD_0:
+            case OperationCode.DLOAD_1:
+            case OperationCode.DLOAD_2:
+            case OperationCode.DLOAD_3:
+            case OperationCode.DMUL:
+            case OperationCode.DNEG:
+            case OperationCode.DREM:
+            case OperationCode.DRETURN:
+            case OperationCode.DSTORE_0:
+            case OperationCode.DSTORE_1:
+            case OperationCode.DSTORE_2:
+            case OperationCode.DSTORE_3:
+            case OperationCode.DSUB:
+            case OperationCode.DUP:
+            case OperationCode.DUP2:
+            case OperationCode.DUP2_X1:
+            case OperationCode.DUP2_X2:
+            case OperationCode.DUP_X1:
+            case OperationCode.DUP_X2:
+            case OperationCode.F2D:
+            case OperationCode.F2I:
+            case OperationCode.F2L:
+            case OperationCode.FADD:
+            case OperationCode.FALOAD:
+            case OperationCode.FASTORE:
+            case OperationCode.FCMPG:
+            case OperationCode.FCMPL:
+            case OperationCode.FCONST_0:
+            case OperationCode.FCONST_1:
+            case OperationCode.FCONST_2:
+            case OperationCode.FDIV:
+            case OperationCode.FLOAD_0:
+            case OperationCode.FLOAD_1:
+            case OperationCode.FLOAD_2:
+            case OperationCode.FLOAD_3:
+            case OperationCode.FMUL:
+            case OperationCode.FNEG:
+            case OperationCode.FREM:
+            case OperationCode.FRETURN:
+            case OperationCode.FSTORE_0:
+            case OperationCode.FSTORE_1:
+            case OperationCode.FSTORE_2:
+            case OperationCode.FSTORE_3:
+            case OperationCode.FSUB:
+            case OperationCode.I2B:
+            case OperationCode.I2C:
+            case OperationCode.I2D:
+            case OperationCode.I2F:
+            case OperationCode.I2L:
+            case OperationCode.I2S:
+            case OperationCode.IADD:
+            case OperationCode.IALOAD:
+            case OperationCode.IAND:
+            case OperationCode.IASTORE:
+            case OperationCode.ICONST_0:
+            case OperationCode.ICONST_1:
+            case OperationCode.ICONST_2:
+            case OperationCode.ICONST_3:
+            case OperationCode.ICONST_4:
+            case OperationCode.ICONST_5:
+            case OperationCode.ICONST_M1:
+            case OperationCode.IDIV:
+            case OperationCode.ILOAD_0:
+            case OperationCode.ILOAD_1:
+            case OperationCode.ILOAD_2:
+            case OperationCode.ILOAD_3:
+            case OperationCode.IMPDEP1:
+            case OperationCode.IMPDEP2:
+            case OperationCode.IMUL:
+            case OperationCode.INEG:
+            case OperationCode.IOR:
+            case OperationCode.IREM:
+            case OperationCode.IRETURN:
+            case OperationCode.ISHL:
+            case OperationCode.ISHR:
+            case OperationCode.ISTORE_0:
+            case OperationCode.ISTORE_1:
+            case OperationCode.ISTORE_2:
+            case OperationCode.ISTORE_3:
+            case OperationCode.ISUB:
+            case OperationCode.IUSHR:
+            case OperationCode.IXOR:
+            case OperationCode.L2D:
+            case OperationCode.L2F:
+            case OperationCode.L2I:
+            case OperationCode.LADD:
+            case OperationCode.LALOAD:
+            case OperationCode.LAND:
+            case OperationCode.LASTORE:
+            case OperationCode.LCMP:
+            case OperationCode.LCONST_0:
+            case OperationCode.LCONST_1:
+            case OperationCode.LDIV:
+            case OperationCode.LLOAD_0:
+            case OperationCode.LLOAD_1:
+            case OperationCode.LLOAD_2:
+            case OperationCode.LLOAD_3:
+            case OperationCode.LMUL:
+            case OperationCode.LNEG:
+            case OperationCode.LOR:
+            case OperationCode.LREM:
+            case OperationCode.LRETURN:
+            case OperationCode.LSHL:
+            case OperationCode.LSHR:
+            case OperationCode.LSTORE_0:
+            case OperationCode.LSTORE_1:
+            case OperationCode.LSTORE_2:
+            case OperationCode.LSTORE_3:
+            case OperationCode.LSUB:
+            case OperationCode.LUSHR:
+            case OperationCode.LXOR:
+            case OperationCode.MONITORENTER:
+            case OperationCode.MONITOREXIT:
+            case OperationCode.NOP:
+            case OperationCode.POP:
+            case OperationCode.POP2:
+            case OperationCode.RETURN:
+            case OperationCode.SALOAD:
+            case OperationCode.SASTORE:
+            case OperationCode.SWAP:
+            case OperationCode.WIDE:
                 return 0;
-            case ByteCode.ALOAD:
-            case ByteCode.ANEWARRAY:
-            case ByteCode.ASTORE:
-            case ByteCode.BIPUSH:
-            case ByteCode.CHECKCAST:
-            case ByteCode.DLOAD:
-            case ByteCode.DSTORE:
-            case ByteCode.FLOAD:
-            case ByteCode.FSTORE:
-            case ByteCode.GETFIELD:
-            case ByteCode.GETSTATIC:
-            case ByteCode.GOTO:
-            case ByteCode.GOTO_W:
-            case ByteCode.IFEQ:
-            case ByteCode.IFGE:
-            case ByteCode.IFGT:
-            case ByteCode.IFLE:
-            case ByteCode.IFLT:
-            case ByteCode.IFNE:
-            case ByteCode.IFNONNULL:
-            case ByteCode.IFNULL:
-            case ByteCode.IF_ACMPEQ:
-            case ByteCode.IF_ACMPNE:
-            case ByteCode.IF_ICMPEQ:
-            case ByteCode.IF_ICMPGE:
-            case ByteCode.IF_ICMPGT:
-            case ByteCode.IF_ICMPLE:
-            case ByteCode.IF_ICMPLT:
-            case ByteCode.IF_ICMPNE:
-            case ByteCode.ILOAD:
-            case ByteCode.INSTANCEOF:
-            case ByteCode.INVOKEINTERFACE:
-            case ByteCode.INVOKESPECIAL:
-            case ByteCode.INVOKESTATIC:
-            case ByteCode.INVOKEVIRTUAL:
-            case ByteCode.ISTORE:
-            case ByteCode.JSR:
-            case ByteCode.JSR_W:
-            case ByteCode.LDC:
-            case ByteCode.LDC2_W:
-            case ByteCode.LDC_W:
-            case ByteCode.LLOAD:
-            case ByteCode.LSTORE:
-            case ByteCode.NEW:
-            case ByteCode.NEWARRAY:
-            case ByteCode.PUTFIELD:
-            case ByteCode.PUTSTATIC:
-            case ByteCode.RET:
-            case ByteCode.SIPUSH:
+            case OperationCode.ALOAD:
+            case OperationCode.ANEWARRAY:
+            case OperationCode.ASTORE:
+            case OperationCode.BIPUSH:
+            case OperationCode.CHECKCAST:
+            case OperationCode.DLOAD:
+            case OperationCode.DSTORE:
+            case OperationCode.FLOAD:
+            case OperationCode.FSTORE:
+            case OperationCode.GETFIELD:
+            case OperationCode.GETSTATIC:
+            case OperationCode.GOTO:
+            case OperationCode.GOTO_W:
+            case OperationCode.IFEQ:
+            case OperationCode.IFGE:
+            case OperationCode.IFGT:
+            case OperationCode.IFLE:
+            case OperationCode.IFLT:
+            case OperationCode.IFNE:
+            case OperationCode.IFNONNULL:
+            case OperationCode.IFNULL:
+            case OperationCode.IF_ACMPEQ:
+            case OperationCode.IF_ACMPNE:
+            case OperationCode.IF_ICMPEQ:
+            case OperationCode.IF_ICMPGE:
+            case OperationCode.IF_ICMPGT:
+            case OperationCode.IF_ICMPLE:
+            case OperationCode.IF_ICMPLT:
+            case OperationCode.IF_ICMPNE:
+            case OperationCode.ILOAD:
+            case OperationCode.INSTANCEOF:
+            case OperationCode.INVOKEINTERFACE:
+            case OperationCode.INVOKESPECIAL:
+            case OperationCode.INVOKESTATIC:
+            case OperationCode.INVOKEVIRTUAL:
+            case OperationCode.ISTORE:
+            case OperationCode.JSR:
+            case OperationCode.JSR_W:
+            case OperationCode.LDC:
+            case OperationCode.LDC2_W:
+            case OperationCode.LDC_W:
+            case OperationCode.LLOAD:
+            case OperationCode.LSTORE:
+            case OperationCode.NEW:
+            case OperationCode.NEWARRAY:
+            case OperationCode.PUTFIELD:
+            case OperationCode.PUTSTATIC:
+            case OperationCode.RET:
+            case OperationCode.SIPUSH:
                 return 1;
 
-            case ByteCode.IINC:
-            case ByteCode.MULTIANEWARRAY:
+            case OperationCode.IINC:
+            case OperationCode.MULTIANEWARRAY:
                 return 2;
 
-            case ByteCode.LOOKUPSWITCH:
-            case ByteCode.TABLESWITCH:
+            case OperationCode.LOOKUPSWITCH:
+            case OperationCode.TABLESWITCH:
                 return -1;
         }
         throw new IllegalArgumentException("Bad opcode: "+opcode);
@@ -1866,222 +1866,222 @@ public class ClassFileWriter {
         // For INVOKE... accounts only for popping this (unless static),
         // ignoring parameters and return type
         switch (opcode) {
-            case ByteCode.DASTORE:
-            case ByteCode.LASTORE:
+            case OperationCode.DASTORE:
+            case OperationCode.LASTORE:
                 return -4;
 
-            case ByteCode.AASTORE:
-            case ByteCode.BASTORE:
-            case ByteCode.CASTORE:
-            case ByteCode.DCMPG:
-            case ByteCode.DCMPL:
-            case ByteCode.FASTORE:
-            case ByteCode.IASTORE:
-            case ByteCode.LCMP:
-            case ByteCode.SASTORE:
+            case OperationCode.AASTORE:
+            case OperationCode.BASTORE:
+            case OperationCode.CASTORE:
+            case OperationCode.DCMPG:
+            case OperationCode.DCMPL:
+            case OperationCode.FASTORE:
+            case OperationCode.IASTORE:
+            case OperationCode.LCMP:
+            case OperationCode.SASTORE:
                 return -3;
 
-            case ByteCode.DADD:
-            case ByteCode.DDIV:
-            case ByteCode.DMUL:
-            case ByteCode.DREM:
-            case ByteCode.DRETURN:
-            case ByteCode.DSTORE:
-            case ByteCode.DSTORE_0:
-            case ByteCode.DSTORE_1:
-            case ByteCode.DSTORE_2:
-            case ByteCode.DSTORE_3:
-            case ByteCode.DSUB:
-            case ByteCode.IF_ACMPEQ:
-            case ByteCode.IF_ACMPNE:
-            case ByteCode.IF_ICMPEQ:
-            case ByteCode.IF_ICMPGE:
-            case ByteCode.IF_ICMPGT:
-            case ByteCode.IF_ICMPLE:
-            case ByteCode.IF_ICMPLT:
-            case ByteCode.IF_ICMPNE:
-            case ByteCode.LADD:
-            case ByteCode.LAND:
-            case ByteCode.LDIV:
-            case ByteCode.LMUL:
-            case ByteCode.LOR:
-            case ByteCode.LREM:
-            case ByteCode.LRETURN:
-            case ByteCode.LSTORE:
-            case ByteCode.LSTORE_0:
-            case ByteCode.LSTORE_1:
-            case ByteCode.LSTORE_2:
-            case ByteCode.LSTORE_3:
-            case ByteCode.LSUB:
-            case ByteCode.LXOR:
-            case ByteCode.POP2:
+            case OperationCode.DADD:
+            case OperationCode.DDIV:
+            case OperationCode.DMUL:
+            case OperationCode.DREM:
+            case OperationCode.DRETURN:
+            case OperationCode.DSTORE:
+            case OperationCode.DSTORE_0:
+            case OperationCode.DSTORE_1:
+            case OperationCode.DSTORE_2:
+            case OperationCode.DSTORE_3:
+            case OperationCode.DSUB:
+            case OperationCode.IF_ACMPEQ:
+            case OperationCode.IF_ACMPNE:
+            case OperationCode.IF_ICMPEQ:
+            case OperationCode.IF_ICMPGE:
+            case OperationCode.IF_ICMPGT:
+            case OperationCode.IF_ICMPLE:
+            case OperationCode.IF_ICMPLT:
+            case OperationCode.IF_ICMPNE:
+            case OperationCode.LADD:
+            case OperationCode.LAND:
+            case OperationCode.LDIV:
+            case OperationCode.LMUL:
+            case OperationCode.LOR:
+            case OperationCode.LREM:
+            case OperationCode.LRETURN:
+            case OperationCode.LSTORE:
+            case OperationCode.LSTORE_0:
+            case OperationCode.LSTORE_1:
+            case OperationCode.LSTORE_2:
+            case OperationCode.LSTORE_3:
+            case OperationCode.LSUB:
+            case OperationCode.LXOR:
+            case OperationCode.POP2:
                 return -2;
 
-            case ByteCode.AALOAD:
-            case ByteCode.ARETURN:
-            case ByteCode.ASTORE:
-            case ByteCode.ASTORE_0:
-            case ByteCode.ASTORE_1:
-            case ByteCode.ASTORE_2:
-            case ByteCode.ASTORE_3:
-            case ByteCode.ATHROW:
-            case ByteCode.BALOAD:
-            case ByteCode.CALOAD:
-            case ByteCode.D2F:
-            case ByteCode.D2I:
-            case ByteCode.FADD:
-            case ByteCode.FALOAD:
-            case ByteCode.FCMPG:
-            case ByteCode.FCMPL:
-            case ByteCode.FDIV:
-            case ByteCode.FMUL:
-            case ByteCode.FREM:
-            case ByteCode.FRETURN:
-            case ByteCode.FSTORE:
-            case ByteCode.FSTORE_0:
-            case ByteCode.FSTORE_1:
-            case ByteCode.FSTORE_2:
-            case ByteCode.FSTORE_3:
-            case ByteCode.FSUB:
-            case ByteCode.GETFIELD:
-            case ByteCode.IADD:
-            case ByteCode.IALOAD:
-            case ByteCode.IAND:
-            case ByteCode.IDIV:
-            case ByteCode.IFEQ:
-            case ByteCode.IFGE:
-            case ByteCode.IFGT:
-            case ByteCode.IFLE:
-            case ByteCode.IFLT:
-            case ByteCode.IFNE:
-            case ByteCode.IFNONNULL:
-            case ByteCode.IFNULL:
-            case ByteCode.IMUL:
-            case ByteCode.INVOKEINTERFACE:       //
-            case ByteCode.INVOKESPECIAL:         // but needs to account for
-            case ByteCode.INVOKEVIRTUAL:         // pops 'this' (unless static)
-            case ByteCode.IOR:
-            case ByteCode.IREM:
-            case ByteCode.IRETURN:
-            case ByteCode.ISHL:
-            case ByteCode.ISHR:
-            case ByteCode.ISTORE:
-            case ByteCode.ISTORE_0:
-            case ByteCode.ISTORE_1:
-            case ByteCode.ISTORE_2:
-            case ByteCode.ISTORE_3:
-            case ByteCode.ISUB:
-            case ByteCode.IUSHR:
-            case ByteCode.IXOR:
-            case ByteCode.L2F:
-            case ByteCode.L2I:
-            case ByteCode.LOOKUPSWITCH:
-            case ByteCode.LSHL:
-            case ByteCode.LSHR:
-            case ByteCode.LUSHR:
-            case ByteCode.MONITORENTER:
-            case ByteCode.MONITOREXIT:
-            case ByteCode.POP:
-            case ByteCode.PUTFIELD:
-            case ByteCode.SALOAD:
-            case ByteCode.TABLESWITCH:
+            case OperationCode.AALOAD:
+            case OperationCode.ARETURN:
+            case OperationCode.ASTORE:
+            case OperationCode.ASTORE_0:
+            case OperationCode.ASTORE_1:
+            case OperationCode.ASTORE_2:
+            case OperationCode.ASTORE_3:
+            case OperationCode.ATHROW:
+            case OperationCode.BALOAD:
+            case OperationCode.CALOAD:
+            case OperationCode.D2F:
+            case OperationCode.D2I:
+            case OperationCode.FADD:
+            case OperationCode.FALOAD:
+            case OperationCode.FCMPG:
+            case OperationCode.FCMPL:
+            case OperationCode.FDIV:
+            case OperationCode.FMUL:
+            case OperationCode.FREM:
+            case OperationCode.FRETURN:
+            case OperationCode.FSTORE:
+            case OperationCode.FSTORE_0:
+            case OperationCode.FSTORE_1:
+            case OperationCode.FSTORE_2:
+            case OperationCode.FSTORE_3:
+            case OperationCode.FSUB:
+            case OperationCode.GETFIELD:
+            case OperationCode.IADD:
+            case OperationCode.IALOAD:
+            case OperationCode.IAND:
+            case OperationCode.IDIV:
+            case OperationCode.IFEQ:
+            case OperationCode.IFGE:
+            case OperationCode.IFGT:
+            case OperationCode.IFLE:
+            case OperationCode.IFLT:
+            case OperationCode.IFNE:
+            case OperationCode.IFNONNULL:
+            case OperationCode.IFNULL:
+            case OperationCode.IMUL:
+            case OperationCode.INVOKEINTERFACE:       //
+            case OperationCode.INVOKESPECIAL:         // but needs to account for
+            case OperationCode.INVOKEVIRTUAL:         // pops 'this' (unless static)
+            case OperationCode.IOR:
+            case OperationCode.IREM:
+            case OperationCode.IRETURN:
+            case OperationCode.ISHL:
+            case OperationCode.ISHR:
+            case OperationCode.ISTORE:
+            case OperationCode.ISTORE_0:
+            case OperationCode.ISTORE_1:
+            case OperationCode.ISTORE_2:
+            case OperationCode.ISTORE_3:
+            case OperationCode.ISUB:
+            case OperationCode.IUSHR:
+            case OperationCode.IXOR:
+            case OperationCode.L2F:
+            case OperationCode.L2I:
+            case OperationCode.LOOKUPSWITCH:
+            case OperationCode.LSHL:
+            case OperationCode.LSHR:
+            case OperationCode.LUSHR:
+            case OperationCode.MONITORENTER:
+            case OperationCode.MONITOREXIT:
+            case OperationCode.POP:
+            case OperationCode.PUTFIELD:
+            case OperationCode.SALOAD:
+            case OperationCode.TABLESWITCH:
                 return -1;
 
-            case ByteCode.ANEWARRAY:
-            case ByteCode.ARRAYLENGTH:
-            case ByteCode.BREAKPOINT:
-            case ByteCode.CHECKCAST:
-            case ByteCode.D2L:
-            case ByteCode.DALOAD:
-            case ByteCode.DNEG:
-            case ByteCode.F2I:
-            case ByteCode.FNEG:
-            case ByteCode.GETSTATIC:
-            case ByteCode.GOTO:
-            case ByteCode.GOTO_W:
-            case ByteCode.I2B:
-            case ByteCode.I2C:
-            case ByteCode.I2F:
-            case ByteCode.I2S:
-            case ByteCode.IINC:
-            case ByteCode.IMPDEP1:
-            case ByteCode.IMPDEP2:
-            case ByteCode.INEG:
-            case ByteCode.INSTANCEOF:
-            case ByteCode.INVOKESTATIC:
-            case ByteCode.L2D:
-            case ByteCode.LALOAD:
-            case ByteCode.LNEG:
-            case ByteCode.NEWARRAY:
-            case ByteCode.NOP:
-            case ByteCode.PUTSTATIC:
-            case ByteCode.RET:
-            case ByteCode.RETURN:
-            case ByteCode.SWAP:
-            case ByteCode.WIDE:
+            case OperationCode.ANEWARRAY:
+            case OperationCode.ARRAYLENGTH:
+            case OperationCode.BREAKPOINT:
+            case OperationCode.CHECKCAST:
+            case OperationCode.D2L:
+            case OperationCode.DALOAD:
+            case OperationCode.DNEG:
+            case OperationCode.F2I:
+            case OperationCode.FNEG:
+            case OperationCode.GETSTATIC:
+            case OperationCode.GOTO:
+            case OperationCode.GOTO_W:
+            case OperationCode.I2B:
+            case OperationCode.I2C:
+            case OperationCode.I2F:
+            case OperationCode.I2S:
+            case OperationCode.IINC:
+            case OperationCode.IMPDEP1:
+            case OperationCode.IMPDEP2:
+            case OperationCode.INEG:
+            case OperationCode.INSTANCEOF:
+            case OperationCode.INVOKESTATIC:
+            case OperationCode.L2D:
+            case OperationCode.LALOAD:
+            case OperationCode.LNEG:
+            case OperationCode.NEWARRAY:
+            case OperationCode.NOP:
+            case OperationCode.PUTSTATIC:
+            case OperationCode.RET:
+            case OperationCode.RETURN:
+            case OperationCode.SWAP:
+            case OperationCode.WIDE:
                 return 0;
 
-            case ByteCode.ACONST_NULL:
-            case ByteCode.ALOAD:
-            case ByteCode.ALOAD_0:
-            case ByteCode.ALOAD_1:
-            case ByteCode.ALOAD_2:
-            case ByteCode.ALOAD_3:
-            case ByteCode.BIPUSH:
-            case ByteCode.DUP:
-            case ByteCode.DUP_X1:
-            case ByteCode.DUP_X2:
-            case ByteCode.F2D:
-            case ByteCode.F2L:
-            case ByteCode.FCONST_0:
-            case ByteCode.FCONST_1:
-            case ByteCode.FCONST_2:
-            case ByteCode.FLOAD:
-            case ByteCode.FLOAD_0:
-            case ByteCode.FLOAD_1:
-            case ByteCode.FLOAD_2:
-            case ByteCode.FLOAD_3:
-            case ByteCode.I2D:
-            case ByteCode.I2L:
-            case ByteCode.ICONST_0:
-            case ByteCode.ICONST_1:
-            case ByteCode.ICONST_2:
-            case ByteCode.ICONST_3:
-            case ByteCode.ICONST_4:
-            case ByteCode.ICONST_5:
-            case ByteCode.ICONST_M1:
-            case ByteCode.ILOAD:
-            case ByteCode.ILOAD_0:
-            case ByteCode.ILOAD_1:
-            case ByteCode.ILOAD_2:
-            case ByteCode.ILOAD_3:
-            case ByteCode.JSR:
-            case ByteCode.JSR_W:
-            case ByteCode.LDC:
-            case ByteCode.LDC_W:
-            case ByteCode.MULTIANEWARRAY:
-            case ByteCode.NEW:
-            case ByteCode.SIPUSH:
+            case OperationCode.ACONST_NULL:
+            case OperationCode.ALOAD:
+            case OperationCode.ALOAD_0:
+            case OperationCode.ALOAD_1:
+            case OperationCode.ALOAD_2:
+            case OperationCode.ALOAD_3:
+            case OperationCode.BIPUSH:
+            case OperationCode.DUP:
+            case OperationCode.DUP_X1:
+            case OperationCode.DUP_X2:
+            case OperationCode.F2D:
+            case OperationCode.F2L:
+            case OperationCode.FCONST_0:
+            case OperationCode.FCONST_1:
+            case OperationCode.FCONST_2:
+            case OperationCode.FLOAD:
+            case OperationCode.FLOAD_0:
+            case OperationCode.FLOAD_1:
+            case OperationCode.FLOAD_2:
+            case OperationCode.FLOAD_3:
+            case OperationCode.I2D:
+            case OperationCode.I2L:
+            case OperationCode.ICONST_0:
+            case OperationCode.ICONST_1:
+            case OperationCode.ICONST_2:
+            case OperationCode.ICONST_3:
+            case OperationCode.ICONST_4:
+            case OperationCode.ICONST_5:
+            case OperationCode.ICONST_M1:
+            case OperationCode.ILOAD:
+            case OperationCode.ILOAD_0:
+            case OperationCode.ILOAD_1:
+            case OperationCode.ILOAD_2:
+            case OperationCode.ILOAD_3:
+            case OperationCode.JSR:
+            case OperationCode.JSR_W:
+            case OperationCode.LDC:
+            case OperationCode.LDC_W:
+            case OperationCode.MULTIANEWARRAY:
+            case OperationCode.NEW:
+            case OperationCode.SIPUSH:
                 return 1;
 
-            case ByteCode.DCONST_0:
-            case ByteCode.DCONST_1:
-            case ByteCode.DLOAD:
-            case ByteCode.DLOAD_0:
-            case ByteCode.DLOAD_1:
-            case ByteCode.DLOAD_2:
-            case ByteCode.DLOAD_3:
-            case ByteCode.DUP2:
-            case ByteCode.DUP2_X1:
-            case ByteCode.DUP2_X2:
-            case ByteCode.LCONST_0:
-            case ByteCode.LCONST_1:
-            case ByteCode.LDC2_W:
-            case ByteCode.LLOAD:
-            case ByteCode.LLOAD_0:
-            case ByteCode.LLOAD_1:
-            case ByteCode.LLOAD_2:
-            case ByteCode.LLOAD_3:
+            case OperationCode.DCONST_0:
+            case OperationCode.DCONST_1:
+            case OperationCode.DLOAD:
+            case OperationCode.DLOAD_0:
+            case OperationCode.DLOAD_1:
+            case OperationCode.DLOAD_2:
+            case OperationCode.DLOAD_3:
+            case OperationCode.DUP2:
+            case OperationCode.DUP2_X1:
+            case OperationCode.DUP2_X2:
+            case OperationCode.LCONST_0:
+            case OperationCode.LCONST_1:
+            case OperationCode.LDC2_W:
+            case OperationCode.LLOAD:
+            case OperationCode.LLOAD_0:
+            case OperationCode.LLOAD_1:
+            case OperationCode.LLOAD_2:
+            case OperationCode.LLOAD_3:
                 return 2;
         }
         throw new IllegalArgumentException("Bad opcode: "+opcode);
@@ -2095,220 +2095,220 @@ public class ClassFileWriter {
     int extra(int opcode)
     {
         switch (opcode) {
-            case ByteCode.AALOAD:
-            case ByteCode.AASTORE:
-            case ByteCode.ACONST_NULL:
-            case ByteCode.ALOAD_0:
-            case ByteCode.ALOAD_1:
-            case ByteCode.ALOAD_2:
-            case ByteCode.ALOAD_3:
-            case ByteCode.ARETURN:
-            case ByteCode.ARRAYLENGTH:
-            case ByteCode.ASTORE_0:
-            case ByteCode.ASTORE_1:
-            case ByteCode.ASTORE_2:
-            case ByteCode.ASTORE_3:
-            case ByteCode.ATHROW:
-            case ByteCode.BALOAD:
-            case ByteCode.BASTORE:
-            case ByteCode.BREAKPOINT:
-            case ByteCode.CALOAD:
-            case ByteCode.CASTORE:
-            case ByteCode.D2F:
-            case ByteCode.D2I:
-            case ByteCode.D2L:
-            case ByteCode.DADD:
-            case ByteCode.DALOAD:
-            case ByteCode.DASTORE:
-            case ByteCode.DCMPG:
-            case ByteCode.DCMPL:
-            case ByteCode.DCONST_0:
-            case ByteCode.DCONST_1:
-            case ByteCode.DDIV:
-            case ByteCode.DLOAD_0:
-            case ByteCode.DLOAD_1:
-            case ByteCode.DLOAD_2:
-            case ByteCode.DLOAD_3:
-            case ByteCode.DMUL:
-            case ByteCode.DNEG:
-            case ByteCode.DREM:
-            case ByteCode.DRETURN:
-            case ByteCode.DSTORE_0:
-            case ByteCode.DSTORE_1:
-            case ByteCode.DSTORE_2:
-            case ByteCode.DSTORE_3:
-            case ByteCode.DSUB:
-            case ByteCode.DUP2:
-            case ByteCode.DUP2_X1:
-            case ByteCode.DUP2_X2:
-            case ByteCode.DUP:
-            case ByteCode.DUP_X1:
-            case ByteCode.DUP_X2:
-            case ByteCode.F2D:
-            case ByteCode.F2I:
-            case ByteCode.F2L:
-            case ByteCode.FADD:
-            case ByteCode.FALOAD:
-            case ByteCode.FASTORE:
-            case ByteCode.FCMPG:
-            case ByteCode.FCMPL:
-            case ByteCode.FCONST_0:
-            case ByteCode.FCONST_1:
-            case ByteCode.FCONST_2:
-            case ByteCode.FDIV:
-            case ByteCode.FLOAD_0:
-            case ByteCode.FLOAD_1:
-            case ByteCode.FLOAD_2:
-            case ByteCode.FLOAD_3:
-            case ByteCode.FMUL:
-            case ByteCode.FNEG:
-            case ByteCode.FREM:
-            case ByteCode.FRETURN:
-            case ByteCode.FSTORE_0:
-            case ByteCode.FSTORE_1:
-            case ByteCode.FSTORE_2:
-            case ByteCode.FSTORE_3:
-            case ByteCode.FSUB:
-            case ByteCode.I2B:
-            case ByteCode.I2C:
-            case ByteCode.I2D:
-            case ByteCode.I2F:
-            case ByteCode.I2L:
-            case ByteCode.I2S:
-            case ByteCode.IADD:
-            case ByteCode.IALOAD:
-            case ByteCode.IAND:
-            case ByteCode.IASTORE:
-            case ByteCode.ICONST_0:
-            case ByteCode.ICONST_1:
-            case ByteCode.ICONST_2:
-            case ByteCode.ICONST_3:
-            case ByteCode.ICONST_4:
-            case ByteCode.ICONST_5:
-            case ByteCode.ICONST_M1:
-            case ByteCode.IDIV:
-            case ByteCode.ILOAD_0:
-            case ByteCode.ILOAD_1:
-            case ByteCode.ILOAD_2:
-            case ByteCode.ILOAD_3:
-            case ByteCode.IMPDEP1:
-            case ByteCode.IMPDEP2:
-            case ByteCode.IMUL:
-            case ByteCode.INEG:
-            case ByteCode.IOR:
-            case ByteCode.IREM:
-            case ByteCode.IRETURN:
-            case ByteCode.ISHL:
-            case ByteCode.ISHR:
-            case ByteCode.ISTORE_0:
-            case ByteCode.ISTORE_1:
-            case ByteCode.ISTORE_2:
-            case ByteCode.ISTORE_3:
-            case ByteCode.ISUB:
-            case ByteCode.IUSHR:
-            case ByteCode.IXOR:
-            case ByteCode.L2D:
-            case ByteCode.L2F:
-            case ByteCode.L2I:
-            case ByteCode.LADD:
-            case ByteCode.LALOAD:
-            case ByteCode.LAND:
-            case ByteCode.LASTORE:
-            case ByteCode.LCMP:
-            case ByteCode.LCONST_0:
-            case ByteCode.LCONST_1:
-            case ByteCode.LDIV:
-            case ByteCode.LLOAD_0:
-            case ByteCode.LLOAD_1:
-            case ByteCode.LLOAD_2:
-            case ByteCode.LLOAD_3:
-            case ByteCode.LMUL:
-            case ByteCode.LNEG:
-            case ByteCode.LOR:
-            case ByteCode.LREM:
-            case ByteCode.LRETURN:
-            case ByteCode.LSHL:
-            case ByteCode.LSHR:
-            case ByteCode.LSTORE_0:
-            case ByteCode.LSTORE_1:
-            case ByteCode.LSTORE_2:
-            case ByteCode.LSTORE_3:
-            case ByteCode.LSUB:
-            case ByteCode.LUSHR:
-            case ByteCode.LXOR:
-            case ByteCode.MONITORENTER:
-            case ByteCode.MONITOREXIT:
-            case ByteCode.NOP:
-            case ByteCode.POP2:
-            case ByteCode.POP:
-            case ByteCode.RETURN:
-            case ByteCode.SALOAD:
-            case ByteCode.SASTORE:
-            case ByteCode.SWAP:
-            case ByteCode.WIDE:
+            case OperationCode.AALOAD:
+            case OperationCode.AASTORE:
+            case OperationCode.ACONST_NULL:
+            case OperationCode.ALOAD_0:
+            case OperationCode.ALOAD_1:
+            case OperationCode.ALOAD_2:
+            case OperationCode.ALOAD_3:
+            case OperationCode.ARETURN:
+            case OperationCode.ARRAYLENGTH:
+            case OperationCode.ASTORE_0:
+            case OperationCode.ASTORE_1:
+            case OperationCode.ASTORE_2:
+            case OperationCode.ASTORE_3:
+            case OperationCode.ATHROW:
+            case OperationCode.BALOAD:
+            case OperationCode.BASTORE:
+            case OperationCode.BREAKPOINT:
+            case OperationCode.CALOAD:
+            case OperationCode.CASTORE:
+            case OperationCode.D2F:
+            case OperationCode.D2I:
+            case OperationCode.D2L:
+            case OperationCode.DADD:
+            case OperationCode.DALOAD:
+            case OperationCode.DASTORE:
+            case OperationCode.DCMPG:
+            case OperationCode.DCMPL:
+            case OperationCode.DCONST_0:
+            case OperationCode.DCONST_1:
+            case OperationCode.DDIV:
+            case OperationCode.DLOAD_0:
+            case OperationCode.DLOAD_1:
+            case OperationCode.DLOAD_2:
+            case OperationCode.DLOAD_3:
+            case OperationCode.DMUL:
+            case OperationCode.DNEG:
+            case OperationCode.DREM:
+            case OperationCode.DRETURN:
+            case OperationCode.DSTORE_0:
+            case OperationCode.DSTORE_1:
+            case OperationCode.DSTORE_2:
+            case OperationCode.DSTORE_3:
+            case OperationCode.DSUB:
+            case OperationCode.DUP2:
+            case OperationCode.DUP2_X1:
+            case OperationCode.DUP2_X2:
+            case OperationCode.DUP:
+            case OperationCode.DUP_X1:
+            case OperationCode.DUP_X2:
+            case OperationCode.F2D:
+            case OperationCode.F2I:
+            case OperationCode.F2L:
+            case OperationCode.FADD:
+            case OperationCode.FALOAD:
+            case OperationCode.FASTORE:
+            case OperationCode.FCMPG:
+            case OperationCode.FCMPL:
+            case OperationCode.FCONST_0:
+            case OperationCode.FCONST_1:
+            case OperationCode.FCONST_2:
+            case OperationCode.FDIV:
+            case OperationCode.FLOAD_0:
+            case OperationCode.FLOAD_1:
+            case OperationCode.FLOAD_2:
+            case OperationCode.FLOAD_3:
+            case OperationCode.FMUL:
+            case OperationCode.FNEG:
+            case OperationCode.FREM:
+            case OperationCode.FRETURN:
+            case OperationCode.FSTORE_0:
+            case OperationCode.FSTORE_1:
+            case OperationCode.FSTORE_2:
+            case OperationCode.FSTORE_3:
+            case OperationCode.FSUB:
+            case OperationCode.I2B:
+            case OperationCode.I2C:
+            case OperationCode.I2D:
+            case OperationCode.I2F:
+            case OperationCode.I2L:
+            case OperationCode.I2S:
+            case OperationCode.IADD:
+            case OperationCode.IALOAD:
+            case OperationCode.IAND:
+            case OperationCode.IASTORE:
+            case OperationCode.ICONST_0:
+            case OperationCode.ICONST_1:
+            case OperationCode.ICONST_2:
+            case OperationCode.ICONST_3:
+            case OperationCode.ICONST_4:
+            case OperationCode.ICONST_5:
+            case OperationCode.ICONST_M1:
+            case OperationCode.IDIV:
+            case OperationCode.ILOAD_0:
+            case OperationCode.ILOAD_1:
+            case OperationCode.ILOAD_2:
+            case OperationCode.ILOAD_3:
+            case OperationCode.IMPDEP1:
+            case OperationCode.IMPDEP2:
+            case OperationCode.IMUL:
+            case OperationCode.INEG:
+            case OperationCode.IOR:
+            case OperationCode.IREM:
+            case OperationCode.IRETURN:
+            case OperationCode.ISHL:
+            case OperationCode.ISHR:
+            case OperationCode.ISTORE_0:
+            case OperationCode.ISTORE_1:
+            case OperationCode.ISTORE_2:
+            case OperationCode.ISTORE_3:
+            case OperationCode.ISUB:
+            case OperationCode.IUSHR:
+            case OperationCode.IXOR:
+            case OperationCode.L2D:
+            case OperationCode.L2F:
+            case OperationCode.L2I:
+            case OperationCode.LADD:
+            case OperationCode.LALOAD:
+            case OperationCode.LAND:
+            case OperationCode.LASTORE:
+            case OperationCode.LCMP:
+            case OperationCode.LCONST_0:
+            case OperationCode.LCONST_1:
+            case OperationCode.LDIV:
+            case OperationCode.LLOAD_0:
+            case OperationCode.LLOAD_1:
+            case OperationCode.LLOAD_2:
+            case OperationCode.LLOAD_3:
+            case OperationCode.LMUL:
+            case OperationCode.LNEG:
+            case OperationCode.LOR:
+            case OperationCode.LREM:
+            case OperationCode.LRETURN:
+            case OperationCode.LSHL:
+            case OperationCode.LSHR:
+            case OperationCode.LSTORE_0:
+            case OperationCode.LSTORE_1:
+            case OperationCode.LSTORE_2:
+            case OperationCode.LSTORE_3:
+            case OperationCode.LSUB:
+            case OperationCode.LUSHR:
+            case OperationCode.LXOR:
+            case OperationCode.MONITORENTER:
+            case OperationCode.MONITOREXIT:
+            case OperationCode.NOP:
+            case OperationCode.POP2:
+            case OperationCode.POP:
+            case OperationCode.RETURN:
+            case OperationCode.SALOAD:
+            case OperationCode.SASTORE:
+            case OperationCode.SWAP:
+            case OperationCode.WIDE:
                 return 0;
 
-            case ByteCode.ALOAD:
-            case ByteCode.ASTORE:
-            case ByteCode.BIPUSH:
-            case ByteCode.DLOAD:
-            case ByteCode.DSTORE:
-            case ByteCode.FLOAD:
-            case ByteCode.FSTORE:
-            case ByteCode.ILOAD:
-            case ByteCode.ISTORE:
-            case ByteCode.LDC:
-            case ByteCode.LLOAD:
-            case ByteCode.LSTORE:
-            case ByteCode.NEWARRAY:
-            case ByteCode.RET:
+            case OperationCode.ALOAD:
+            case OperationCode.ASTORE:
+            case OperationCode.BIPUSH:
+            case OperationCode.DLOAD:
+            case OperationCode.DSTORE:
+            case OperationCode.FLOAD:
+            case OperationCode.FSTORE:
+            case OperationCode.ILOAD:
+            case OperationCode.ISTORE:
+            case OperationCode.LDC:
+            case OperationCode.LLOAD:
+            case OperationCode.LSTORE:
+            case OperationCode.NEWARRAY:
+            case OperationCode.RET:
                 return 1;
 
-            case ByteCode.ANEWARRAY:
-            case ByteCode.CHECKCAST:
-            case ByteCode.GETFIELD:
-            case ByteCode.GETSTATIC:
-            case ByteCode.GOTO:
-            case ByteCode.IFEQ:
-            case ByteCode.IFGE:
-            case ByteCode.IFGT:
-            case ByteCode.IFLE:
-            case ByteCode.IFLT:
-            case ByteCode.IFNE:
-            case ByteCode.IFNONNULL:
-            case ByteCode.IFNULL:
-            case ByteCode.IF_ACMPEQ:
-            case ByteCode.IF_ACMPNE:
-            case ByteCode.IF_ICMPEQ:
-            case ByteCode.IF_ICMPGE:
-            case ByteCode.IF_ICMPGT:
-            case ByteCode.IF_ICMPLE:
-            case ByteCode.IF_ICMPLT:
-            case ByteCode.IF_ICMPNE:
-            case ByteCode.IINC:
-            case ByteCode.INSTANCEOF:
-            case ByteCode.INVOKEINTERFACE:
-            case ByteCode.INVOKESPECIAL:
-            case ByteCode.INVOKESTATIC:
-            case ByteCode.INVOKEVIRTUAL:
-            case ByteCode.JSR:
-            case ByteCode.LDC2_W:
-            case ByteCode.LDC_W:
-            case ByteCode.NEW:
-            case ByteCode.PUTFIELD:
-            case ByteCode.PUTSTATIC:
-            case ByteCode.SIPUSH:
+            case OperationCode.ANEWARRAY:
+            case OperationCode.CHECKCAST:
+            case OperationCode.GETFIELD:
+            case OperationCode.GETSTATIC:
+            case OperationCode.GOTO:
+            case OperationCode.IFEQ:
+            case OperationCode.IFGE:
+            case OperationCode.IFGT:
+            case OperationCode.IFLE:
+            case OperationCode.IFLT:
+            case OperationCode.IFNE:
+            case OperationCode.IFNONNULL:
+            case OperationCode.IFNULL:
+            case OperationCode.IF_ACMPEQ:
+            case OperationCode.IF_ACMPNE:
+            case OperationCode.IF_ICMPEQ:
+            case OperationCode.IF_ICMPGE:
+            case OperationCode.IF_ICMPGT:
+            case OperationCode.IF_ICMPLE:
+            case OperationCode.IF_ICMPLT:
+            case OperationCode.IF_ICMPNE:
+            case OperationCode.IINC:
+            case OperationCode.INSTANCEOF:
+            case OperationCode.INVOKEINTERFACE:
+            case OperationCode.INVOKESPECIAL:
+            case OperationCode.INVOKESTATIC:
+            case OperationCode.INVOKEVIRTUAL:
+            case OperationCode.JSR:
+            case OperationCode.LDC2_W:
+            case OperationCode.LDC_W:
+            case OperationCode.NEW:
+            case OperationCode.PUTFIELD:
+            case OperationCode.PUTSTATIC:
+            case OperationCode.SIPUSH:
                 return 2;
 
-            case ByteCode.MULTIANEWARRAY:
+            case OperationCode.MULTIANEWARRAY:
                 return 3;
 
-            case ByteCode.GOTO_W:
-            case ByteCode.JSR_W:
+            case OperationCode.GOTO_W:
+            case OperationCode.JSR_W:
                 return 4;
 
-            case ByteCode.LOOKUPSWITCH:    // depends on alignment
-            case ByteCode.TABLESWITCH: // depends on alignment
+            case OperationCode.LOOKUPSWITCH:    // depends on alignment
+            case OperationCode.TABLESWITCH: // depends on alignment
                 return -1;
         }
         throw new IllegalArgumentException("Bad opcode: "+opcode);
@@ -2318,211 +2318,211 @@ public class ClassFileWriter {
     {
         if (DEBUGSTACK || DEBUGCODE) {
             switch (code) {
-                case ByteCode.NOP:              return "nop";
-                case ByteCode.ACONST_NULL:      return "aconst_null";
-                case ByteCode.ICONST_M1:        return "iconst_m1";
-                case ByteCode.ICONST_0:         return "iconst_0";
-                case ByteCode.ICONST_1:         return "iconst_1";
-                case ByteCode.ICONST_2:         return "iconst_2";
-                case ByteCode.ICONST_3:         return "iconst_3";
-                case ByteCode.ICONST_4:         return "iconst_4";
-                case ByteCode.ICONST_5:         return "iconst_5";
-                case ByteCode.LCONST_0:         return "lconst_0";
-                case ByteCode.LCONST_1:         return "lconst_1";
-                case ByteCode.FCONST_0:         return "fconst_0";
-                case ByteCode.FCONST_1:         return "fconst_1";
-                case ByteCode.FCONST_2:         return "fconst_2";
-                case ByteCode.DCONST_0:         return "dconst_0";
-                case ByteCode.DCONST_1:         return "dconst_1";
-                case ByteCode.BIPUSH:           return "bipush";
-                case ByteCode.SIPUSH:           return "sipush";
-                case ByteCode.LDC:              return "ldc";
-                case ByteCode.LDC_W:            return "ldc_w";
-                case ByteCode.LDC2_W:           return "ldc2_w";
-                case ByteCode.ILOAD:            return "iload";
-                case ByteCode.LLOAD:            return "lload";
-                case ByteCode.FLOAD:            return "fload";
-                case ByteCode.DLOAD:            return "dload";
-                case ByteCode.ALOAD:            return "aload";
-                case ByteCode.ILOAD_0:          return "iload_0";
-                case ByteCode.ILOAD_1:          return "iload_1";
-                case ByteCode.ILOAD_2:          return "iload_2";
-                case ByteCode.ILOAD_3:          return "iload_3";
-                case ByteCode.LLOAD_0:          return "lload_0";
-                case ByteCode.LLOAD_1:          return "lload_1";
-                case ByteCode.LLOAD_2:          return "lload_2";
-                case ByteCode.LLOAD_3:          return "lload_3";
-                case ByteCode.FLOAD_0:          return "fload_0";
-                case ByteCode.FLOAD_1:          return "fload_1";
-                case ByteCode.FLOAD_2:          return "fload_2";
-                case ByteCode.FLOAD_3:          return "fload_3";
-                case ByteCode.DLOAD_0:          return "dload_0";
-                case ByteCode.DLOAD_1:          return "dload_1";
-                case ByteCode.DLOAD_2:          return "dload_2";
-                case ByteCode.DLOAD_3:          return "dload_3";
-                case ByteCode.ALOAD_0:          return "aload_0";
-                case ByteCode.ALOAD_1:          return "aload_1";
-                case ByteCode.ALOAD_2:          return "aload_2";
-                case ByteCode.ALOAD_3:          return "aload_3";
-                case ByteCode.IALOAD:           return "iaload";
-                case ByteCode.LALOAD:           return "laload";
-                case ByteCode.FALOAD:           return "faload";
-                case ByteCode.DALOAD:           return "daload";
-                case ByteCode.AALOAD:           return "aaload";
-                case ByteCode.BALOAD:           return "baload";
-                case ByteCode.CALOAD:           return "caload";
-                case ByteCode.SALOAD:           return "saload";
-                case ByteCode.ISTORE:           return "istore";
-                case ByteCode.LSTORE:           return "lstore";
-                case ByteCode.FSTORE:           return "fstore";
-                case ByteCode.DSTORE:           return "dstore";
-                case ByteCode.ASTORE:           return "astore";
-                case ByteCode.ISTORE_0:         return "istore_0";
-                case ByteCode.ISTORE_1:         return "istore_1";
-                case ByteCode.ISTORE_2:         return "istore_2";
-                case ByteCode.ISTORE_3:         return "istore_3";
-                case ByteCode.LSTORE_0:         return "lstore_0";
-                case ByteCode.LSTORE_1:         return "lstore_1";
-                case ByteCode.LSTORE_2:         return "lstore_2";
-                case ByteCode.LSTORE_3:         return "lstore_3";
-                case ByteCode.FSTORE_0:         return "fstore_0";
-                case ByteCode.FSTORE_1:         return "fstore_1";
-                case ByteCode.FSTORE_2:         return "fstore_2";
-                case ByteCode.FSTORE_3:         return "fstore_3";
-                case ByteCode.DSTORE_0:         return "dstore_0";
-                case ByteCode.DSTORE_1:         return "dstore_1";
-                case ByteCode.DSTORE_2:         return "dstore_2";
-                case ByteCode.DSTORE_3:         return "dstore_3";
-                case ByteCode.ASTORE_0:         return "astore_0";
-                case ByteCode.ASTORE_1:         return "astore_1";
-                case ByteCode.ASTORE_2:         return "astore_2";
-                case ByteCode.ASTORE_3:         return "astore_3";
-                case ByteCode.IASTORE:          return "iastore";
-                case ByteCode.LASTORE:          return "lastore";
-                case ByteCode.FASTORE:          return "fastore";
-                case ByteCode.DASTORE:          return "dastore";
-                case ByteCode.AASTORE:          return "aastore";
-                case ByteCode.BASTORE:          return "bastore";
-                case ByteCode.CASTORE:          return "castore";
-                case ByteCode.SASTORE:          return "sastore";
-                case ByteCode.POP:              return "pop";
-                case ByteCode.POP2:             return "pop2";
-                case ByteCode.DUP:              return "dup";
-                case ByteCode.DUP_X1:           return "dup_x1";
-                case ByteCode.DUP_X2:           return "dup_x2";
-                case ByteCode.DUP2:             return "dup2";
-                case ByteCode.DUP2_X1:          return "dup2_x1";
-                case ByteCode.DUP2_X2:          return "dup2_x2";
-                case ByteCode.SWAP:             return "swap";
-                case ByteCode.IADD:             return "iadd";
-                case ByteCode.LADD:             return "ladd";
-                case ByteCode.FADD:             return "fadd";
-                case ByteCode.DADD:             return "dadd";
-                case ByteCode.ISUB:             return "isub";
-                case ByteCode.LSUB:             return "lsub";
-                case ByteCode.FSUB:             return "fsub";
-                case ByteCode.DSUB:             return "dsub";
-                case ByteCode.IMUL:             return "imul";
-                case ByteCode.LMUL:             return "lmul";
-                case ByteCode.FMUL:             return "fmul";
-                case ByteCode.DMUL:             return "dmul";
-                case ByteCode.IDIV:             return "idiv";
-                case ByteCode.LDIV:             return "ldiv";
-                case ByteCode.FDIV:             return "fdiv";
-                case ByteCode.DDIV:             return "ddiv";
-                case ByteCode.IREM:             return "irem";
-                case ByteCode.LREM:             return "lrem";
-                case ByteCode.FREM:             return "frem";
-                case ByteCode.DREM:             return "drem";
-                case ByteCode.INEG:             return "ineg";
-                case ByteCode.LNEG:             return "lneg";
-                case ByteCode.FNEG:             return "fneg";
-                case ByteCode.DNEG:             return "dneg";
-                case ByteCode.ISHL:             return "ishl";
-                case ByteCode.LSHL:             return "lshl";
-                case ByteCode.ISHR:             return "ishr";
-                case ByteCode.LSHR:             return "lshr";
-                case ByteCode.IUSHR:            return "iushr";
-                case ByteCode.LUSHR:            return "lushr";
-                case ByteCode.IAND:             return "iand";
-                case ByteCode.LAND:             return "land";
-                case ByteCode.IOR:              return "ior";
-                case ByteCode.LOR:              return "lor";
-                case ByteCode.IXOR:             return "ixor";
-                case ByteCode.LXOR:             return "lxor";
-                case ByteCode.IINC:             return "iinc";
-                case ByteCode.I2L:              return "i2l";
-                case ByteCode.I2F:              return "i2f";
-                case ByteCode.I2D:              return "i2d";
-                case ByteCode.L2I:              return "l2i";
-                case ByteCode.L2F:              return "l2f";
-                case ByteCode.L2D:              return "l2d";
-                case ByteCode.F2I:              return "f2i";
-                case ByteCode.F2L:              return "f2l";
-                case ByteCode.F2D:              return "f2d";
-                case ByteCode.D2I:              return "d2i";
-                case ByteCode.D2L:              return "d2l";
-                case ByteCode.D2F:              return "d2f";
-                case ByteCode.I2B:              return "i2b";
-                case ByteCode.I2C:              return "i2c";
-                case ByteCode.I2S:              return "i2s";
-                case ByteCode.LCMP:             return "lcmp";
-                case ByteCode.FCMPL:            return "fcmpl";
-                case ByteCode.FCMPG:            return "fcmpg";
-                case ByteCode.DCMPL:            return "dcmpl";
-                case ByteCode.DCMPG:            return "dcmpg";
-                case ByteCode.IFEQ:             return "ifeq";
-                case ByteCode.IFNE:             return "ifne";
-                case ByteCode.IFLT:             return "iflt";
-                case ByteCode.IFGE:             return "ifge";
-                case ByteCode.IFGT:             return "ifgt";
-                case ByteCode.IFLE:             return "ifle";
-                case ByteCode.IF_ICMPEQ:        return "if_icmpeq";
-                case ByteCode.IF_ICMPNE:        return "if_icmpne";
-                case ByteCode.IF_ICMPLT:        return "if_icmplt";
-                case ByteCode.IF_ICMPGE:        return "if_icmpge";
-                case ByteCode.IF_ICMPGT:        return "if_icmpgt";
-                case ByteCode.IF_ICMPLE:        return "if_icmple";
-                case ByteCode.IF_ACMPEQ:        return "if_acmpeq";
-                case ByteCode.IF_ACMPNE:        return "if_acmpne";
-                case ByteCode.GOTO:             return "goto";
-                case ByteCode.JSR:              return "jsr";
-                case ByteCode.RET:              return "ret";
-                case ByteCode.TABLESWITCH:      return "tableswitch";
-                case ByteCode.LOOKUPSWITCH:     return "lookupswitch";
-                case ByteCode.IRETURN:          return "ireturn";
-                case ByteCode.LRETURN:          return "lreturn";
-                case ByteCode.FRETURN:          return "freturn";
-                case ByteCode.DRETURN:          return "dreturn";
-                case ByteCode.ARETURN:          return "areturn";
-                case ByteCode.RETURN:           return "return";
-                case ByteCode.GETSTATIC:        return "getstatic";
-                case ByteCode.PUTSTATIC:        return "putstatic";
-                case ByteCode.GETFIELD:         return "getfield";
-                case ByteCode.PUTFIELD:         return "putfield";
-                case ByteCode.INVOKEVIRTUAL:    return "invokevirtual";
-                case ByteCode.INVOKESPECIAL:    return "invokespecial";
-                case ByteCode.INVOKESTATIC:     return "invokestatic";
-                case ByteCode.INVOKEINTERFACE:  return "invokeinterface";
-                case ByteCode.NEW:              return "new";
-                case ByteCode.NEWARRAY:         return "newarray";
-                case ByteCode.ANEWARRAY:        return "anewarray";
-                case ByteCode.ARRAYLENGTH:      return "arraylength";
-                case ByteCode.ATHROW:           return "athrow";
-                case ByteCode.CHECKCAST:        return "checkcast";
-                case ByteCode.INSTANCEOF:       return "instanceof";
-                case ByteCode.MONITORENTER:     return "monitorenter";
-                case ByteCode.MONITOREXIT:      return "monitorexit";
-                case ByteCode.WIDE:             return "wide";
-                case ByteCode.MULTIANEWARRAY:   return "multianewarray";
-                case ByteCode.IFNULL:           return "ifnull";
-                case ByteCode.IFNONNULL:        return "ifnonnull";
-                case ByteCode.GOTO_W:           return "goto_w";
-                case ByteCode.JSR_W:            return "jsr_w";
-                case ByteCode.BREAKPOINT:       return "breakpoint";
+                case OperationCode.NOP:              return "nop";
+                case OperationCode.ACONST_NULL:      return "aconst_null";
+                case OperationCode.ICONST_M1:        return "iconst_m1";
+                case OperationCode.ICONST_0:         return "iconst_0";
+                case OperationCode.ICONST_1:         return "iconst_1";
+                case OperationCode.ICONST_2:         return "iconst_2";
+                case OperationCode.ICONST_3:         return "iconst_3";
+                case OperationCode.ICONST_4:         return "iconst_4";
+                case OperationCode.ICONST_5:         return "iconst_5";
+                case OperationCode.LCONST_0:         return "lconst_0";
+                case OperationCode.LCONST_1:         return "lconst_1";
+                case OperationCode.FCONST_0:         return "fconst_0";
+                case OperationCode.FCONST_1:         return "fconst_1";
+                case OperationCode.FCONST_2:         return "fconst_2";
+                case OperationCode.DCONST_0:         return "dconst_0";
+                case OperationCode.DCONST_1:         return "dconst_1";
+                case OperationCode.BIPUSH:           return "bipush";
+                case OperationCode.SIPUSH:           return "sipush";
+                case OperationCode.LDC:              return "ldc";
+                case OperationCode.LDC_W:            return "ldc_w";
+                case OperationCode.LDC2_W:           return "ldc2_w";
+                case OperationCode.ILOAD:            return "iload";
+                case OperationCode.LLOAD:            return "lload";
+                case OperationCode.FLOAD:            return "fload";
+                case OperationCode.DLOAD:            return "dload";
+                case OperationCode.ALOAD:            return "aload";
+                case OperationCode.ILOAD_0:          return "iload_0";
+                case OperationCode.ILOAD_1:          return "iload_1";
+                case OperationCode.ILOAD_2:          return "iload_2";
+                case OperationCode.ILOAD_3:          return "iload_3";
+                case OperationCode.LLOAD_0:          return "lload_0";
+                case OperationCode.LLOAD_1:          return "lload_1";
+                case OperationCode.LLOAD_2:          return "lload_2";
+                case OperationCode.LLOAD_3:          return "lload_3";
+                case OperationCode.FLOAD_0:          return "fload_0";
+                case OperationCode.FLOAD_1:          return "fload_1";
+                case OperationCode.FLOAD_2:          return "fload_2";
+                case OperationCode.FLOAD_3:          return "fload_3";
+                case OperationCode.DLOAD_0:          return "dload_0";
+                case OperationCode.DLOAD_1:          return "dload_1";
+                case OperationCode.DLOAD_2:          return "dload_2";
+                case OperationCode.DLOAD_3:          return "dload_3";
+                case OperationCode.ALOAD_0:          return "aload_0";
+                case OperationCode.ALOAD_1:          return "aload_1";
+                case OperationCode.ALOAD_2:          return "aload_2";
+                case OperationCode.ALOAD_3:          return "aload_3";
+                case OperationCode.IALOAD:           return "iaload";
+                case OperationCode.LALOAD:           return "laload";
+                case OperationCode.FALOAD:           return "faload";
+                case OperationCode.DALOAD:           return "daload";
+                case OperationCode.AALOAD:           return "aaload";
+                case OperationCode.BALOAD:           return "baload";
+                case OperationCode.CALOAD:           return "caload";
+                case OperationCode.SALOAD:           return "saload";
+                case OperationCode.ISTORE:           return "istore";
+                case OperationCode.LSTORE:           return "lstore";
+                case OperationCode.FSTORE:           return "fstore";
+                case OperationCode.DSTORE:           return "dstore";
+                case OperationCode.ASTORE:           return "astore";
+                case OperationCode.ISTORE_0:         return "istore_0";
+                case OperationCode.ISTORE_1:         return "istore_1";
+                case OperationCode.ISTORE_2:         return "istore_2";
+                case OperationCode.ISTORE_3:         return "istore_3";
+                case OperationCode.LSTORE_0:         return "lstore_0";
+                case OperationCode.LSTORE_1:         return "lstore_1";
+                case OperationCode.LSTORE_2:         return "lstore_2";
+                case OperationCode.LSTORE_3:         return "lstore_3";
+                case OperationCode.FSTORE_0:         return "fstore_0";
+                case OperationCode.FSTORE_1:         return "fstore_1";
+                case OperationCode.FSTORE_2:         return "fstore_2";
+                case OperationCode.FSTORE_3:         return "fstore_3";
+                case OperationCode.DSTORE_0:         return "dstore_0";
+                case OperationCode.DSTORE_1:         return "dstore_1";
+                case OperationCode.DSTORE_2:         return "dstore_2";
+                case OperationCode.DSTORE_3:         return "dstore_3";
+                case OperationCode.ASTORE_0:         return "astore_0";
+                case OperationCode.ASTORE_1:         return "astore_1";
+                case OperationCode.ASTORE_2:         return "astore_2";
+                case OperationCode.ASTORE_3:         return "astore_3";
+                case OperationCode.IASTORE:          return "iastore";
+                case OperationCode.LASTORE:          return "lastore";
+                case OperationCode.FASTORE:          return "fastore";
+                case OperationCode.DASTORE:          return "dastore";
+                case OperationCode.AASTORE:          return "aastore";
+                case OperationCode.BASTORE:          return "bastore";
+                case OperationCode.CASTORE:          return "castore";
+                case OperationCode.SASTORE:          return "sastore";
+                case OperationCode.POP:              return "pop";
+                case OperationCode.POP2:             return "pop2";
+                case OperationCode.DUP:              return "dup";
+                case OperationCode.DUP_X1:           return "dup_x1";
+                case OperationCode.DUP_X2:           return "dup_x2";
+                case OperationCode.DUP2:             return "dup2";
+                case OperationCode.DUP2_X1:          return "dup2_x1";
+                case OperationCode.DUP2_X2:          return "dup2_x2";
+                case OperationCode.SWAP:             return "swap";
+                case OperationCode.IADD:             return "iadd";
+                case OperationCode.LADD:             return "ladd";
+                case OperationCode.FADD:             return "fadd";
+                case OperationCode.DADD:             return "dadd";
+                case OperationCode.ISUB:             return "isub";
+                case OperationCode.LSUB:             return "lsub";
+                case OperationCode.FSUB:             return "fsub";
+                case OperationCode.DSUB:             return "dsub";
+                case OperationCode.IMUL:             return "imul";
+                case OperationCode.LMUL:             return "lmul";
+                case OperationCode.FMUL:             return "fmul";
+                case OperationCode.DMUL:             return "dmul";
+                case OperationCode.IDIV:             return "idiv";
+                case OperationCode.LDIV:             return "ldiv";
+                case OperationCode.FDIV:             return "fdiv";
+                case OperationCode.DDIV:             return "ddiv";
+                case OperationCode.IREM:             return "irem";
+                case OperationCode.LREM:             return "lrem";
+                case OperationCode.FREM:             return "frem";
+                case OperationCode.DREM:             return "drem";
+                case OperationCode.INEG:             return "ineg";
+                case OperationCode.LNEG:             return "lneg";
+                case OperationCode.FNEG:             return "fneg";
+                case OperationCode.DNEG:             return "dneg";
+                case OperationCode.ISHL:             return "ishl";
+                case OperationCode.LSHL:             return "lshl";
+                case OperationCode.ISHR:             return "ishr";
+                case OperationCode.LSHR:             return "lshr";
+                case OperationCode.IUSHR:            return "iushr";
+                case OperationCode.LUSHR:            return "lushr";
+                case OperationCode.IAND:             return "iand";
+                case OperationCode.LAND:             return "land";
+                case OperationCode.IOR:              return "ior";
+                case OperationCode.LOR:              return "lor";
+                case OperationCode.IXOR:             return "ixor";
+                case OperationCode.LXOR:             return "lxor";
+                case OperationCode.IINC:             return "iinc";
+                case OperationCode.I2L:              return "i2l";
+                case OperationCode.I2F:              return "i2f";
+                case OperationCode.I2D:              return "i2d";
+                case OperationCode.L2I:              return "l2i";
+                case OperationCode.L2F:              return "l2f";
+                case OperationCode.L2D:              return "l2d";
+                case OperationCode.F2I:              return "f2i";
+                case OperationCode.F2L:              return "f2l";
+                case OperationCode.F2D:              return "f2d";
+                case OperationCode.D2I:              return "d2i";
+                case OperationCode.D2L:              return "d2l";
+                case OperationCode.D2F:              return "d2f";
+                case OperationCode.I2B:              return "i2b";
+                case OperationCode.I2C:              return "i2c";
+                case OperationCode.I2S:              return "i2s";
+                case OperationCode.LCMP:             return "lcmp";
+                case OperationCode.FCMPL:            return "fcmpl";
+                case OperationCode.FCMPG:            return "fcmpg";
+                case OperationCode.DCMPL:            return "dcmpl";
+                case OperationCode.DCMPG:            return "dcmpg";
+                case OperationCode.IFEQ:             return "ifeq";
+                case OperationCode.IFNE:             return "ifne";
+                case OperationCode.IFLT:             return "iflt";
+                case OperationCode.IFGE:             return "ifge";
+                case OperationCode.IFGT:             return "ifgt";
+                case OperationCode.IFLE:             return "ifle";
+                case OperationCode.IF_ICMPEQ:        return "if_icmpeq";
+                case OperationCode.IF_ICMPNE:        return "if_icmpne";
+                case OperationCode.IF_ICMPLT:        return "if_icmplt";
+                case OperationCode.IF_ICMPGE:        return "if_icmpge";
+                case OperationCode.IF_ICMPGT:        return "if_icmpgt";
+                case OperationCode.IF_ICMPLE:        return "if_icmple";
+                case OperationCode.IF_ACMPEQ:        return "if_acmpeq";
+                case OperationCode.IF_ACMPNE:        return "if_acmpne";
+                case OperationCode.GOTO:             return "goto";
+                case OperationCode.JSR:              return "jsr";
+                case OperationCode.RET:              return "ret";
+                case OperationCode.TABLESWITCH:      return "tableswitch";
+                case OperationCode.LOOKUPSWITCH:     return "lookupswitch";
+                case OperationCode.IRETURN:          return "ireturn";
+                case OperationCode.LRETURN:          return "lreturn";
+                case OperationCode.FRETURN:          return "freturn";
+                case OperationCode.DRETURN:          return "dreturn";
+                case OperationCode.ARETURN:          return "areturn";
+                case OperationCode.RETURN:           return "return";
+                case OperationCode.GETSTATIC:        return "getstatic";
+                case OperationCode.PUTSTATIC:        return "putstatic";
+                case OperationCode.GETFIELD:         return "getfield";
+                case OperationCode.PUTFIELD:         return "putfield";
+                case OperationCode.INVOKEVIRTUAL:    return "invokevirtual";
+                case OperationCode.INVOKESPECIAL:    return "invokespecial";
+                case OperationCode.INVOKESTATIC:     return "invokestatic";
+                case OperationCode.INVOKEINTERFACE:  return "invokeinterface";
+                case OperationCode.NEW:              return "new";
+                case OperationCode.NEWARRAY:         return "newarray";
+                case OperationCode.ANEWARRAY:        return "anewarray";
+                case OperationCode.ARRAYLENGTH:      return "arraylength";
+                case OperationCode.ATHROW:           return "athrow";
+                case OperationCode.CHECKCAST:        return "checkcast";
+                case OperationCode.INSTANCEOF:       return "instanceof";
+                case OperationCode.MONITORENTER:     return "monitorenter";
+                case OperationCode.MONITOREXIT:      return "monitorexit";
+                case OperationCode.WIDE:             return "wide";
+                case OperationCode.MULTIANEWARRAY:   return "multianewarray";
+                case OperationCode.IFNULL:           return "ifnull";
+                case OperationCode.IFNONNULL:        return "ifnonnull";
+                case OperationCode.GOTO_W:           return "goto_w";
+                case OperationCode.JSR_W:            return "jsr_w";
+                case OperationCode.BREAKPOINT:       return "breakpoint";
 
-                case ByteCode.IMPDEP1:          return "impdep1";
-                case ByteCode.IMPDEP2:          return "impdep2";
+                case OperationCode.IMPDEP1:          return "impdep1";
+                case OperationCode.IMPDEP2:          return "impdep2";
             }
         }
         return "";
