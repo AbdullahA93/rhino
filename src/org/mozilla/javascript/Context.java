@@ -830,13 +830,13 @@ public class Context
                                      int lineOffset)
     {
         Context cx = Context.getContext();
-        //TODO:condition if..else statements without using surrounding If , Just add the needed braCes if (){} else{}
-
-        if (cx.hasFeature(FEATURE_WARNING_AS_ERROR))
+        if (cx.hasFeature(FEATURE_WARNING_AS_ERROR)) {
             reportError(message, sourceName, lineno, lineSource, lineOffset);
-        else
+        }
+        else {
             cx.getErrorReporter().warning(message, sourceName, lineno,
-                                          lineSource, lineOffset);
+                    lineSource, lineOffset);
+        }
     }
 
     /**
