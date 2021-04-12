@@ -2159,8 +2159,6 @@ public class Interpreter implements Evaluator
                 int handlerStart   = table[i + EXCEPTION_HANDLER_SLOT];
                 int type           = table[i + EXCEPTION_TYPE_SLOT];
                 int exceptionLocal = table[i + EXCEPTION_LOCAL_SLOT];
-                //TODO:Local variable is declared and/orassigned, but not used , need to be removed
-                int scopeLocal     = table[i + EXCEPTION_SCOPE_SLOT];
 
                 out.println(" tryStart="+tryStart+" tryEnd="+tryEnd
                             +" handlerStart="+handlerStart
