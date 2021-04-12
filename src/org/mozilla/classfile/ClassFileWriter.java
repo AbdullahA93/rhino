@@ -2632,7 +2632,7 @@ final class ClassFileField
         offset = ClassFileWriter.putInt16(itsNameIndex, data, offset);
         offset = ClassFileWriter.putInt16(itsTypeIndex, data, offset);
         if (!itsHasAttributes) {
-            // write 0 attributes
+            // write 0 attributes2
             offset = ClassFileWriter.putInt16(0, data, offset);
         } else {
             offset = ClassFileWriter.putInt16(1, data, offset);
