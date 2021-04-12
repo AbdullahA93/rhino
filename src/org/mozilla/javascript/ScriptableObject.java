@@ -175,9 +175,8 @@ public abstract class ScriptableObject implements Scriptable, Serializable,
                 indexOrHash = name.hashCode();
             }
         }
-        //FIXME:get method will not necessarily see a consistent state for the object the getAttributes should be made synchronized instead o
-        // final int
-        final int getAttributes()
+
+        final synchronized int getAttributes()
         {
             return attributes;
         }
