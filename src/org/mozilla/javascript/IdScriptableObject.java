@@ -172,8 +172,7 @@ public abstract class IdScriptableObject extends ScriptableObject
                 return obj.findPrototypeId(name);
             }
             int id = lastFoundId;
-            //TODO:Thie line compare a java.lang.String parameter for reference equality using the == or != operators should be .equals
-            if (name == array[(id - 1) * SLOT_SPAN + NAME_SLOT]) {
+            if (name .equals(array[(id - 1) * SLOT_SPAN + NAME_SLOT])) {
                 return id;
             }
             id = obj.findPrototypeId(name);
